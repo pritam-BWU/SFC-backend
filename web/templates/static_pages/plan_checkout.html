@@ -1,0 +1,393 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodClub Membership Checkout</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandYellow: "#F7B500",
+            brandYellowSoft: "#FFF6D8",
+            brandRed: "#D90000",
+            brandRedSoft: "#FFF1EF",
+            pageBg: "#FFFDF8",
+            darkText: "#141414"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+
+    .benefit-card {
+      height: 118px;
+      border: 1px solid #f4dfaa;
+      border-radius: 16px;
+      background: #fffefa;
+      padding: 13px;
+    }
+
+    .benefit-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #fff3c8;
+      color: #d90000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .benefit-card h3 {
+      font-size: 15px;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .benefit-card p {
+      color: #666;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .phone-mockup {
+      width: 145px;
+      height: 180px;
+      border-radius: 26px;
+      background: #111;
+      padding: 9px;
+      margin: auto;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+    }
+
+    .phone-screen {
+      height: 100%;
+      background: #fffdf8;
+      border-radius: 19px;
+      padding: 11px;
+      overflow: hidden;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .summary-row span {
+      font-weight: 700;
+      color: #555;
+    }
+
+    .summary-row strong {
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .mini-card {
+      background: #ffffff;
+      border: 1px solid #f4dfaa;
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.035);
+    }
+
+    .mini-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #fff3c8;
+      color: #d90000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+      flex-shrink: 0;
+      font-weight: 900;
+    }
+
+    .mini-card h3 {
+      font-size: 15px;
+      font-weight: 900;
+      color: #d90000;
+    }
+
+    .mini-card p {
+      color: #666;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .checkout-scale {
+    transform: scale(0.8);
+    transform-origin: top center;
+    width: 125%;
+    margin-left: -12.5%;
+    }
+  </style>
+</head>
+
+
+
+<body class="bg-pageBg text-darkText overflow-hidden">
+
+  {% include 'components/navbar.html' %}
+<div class="checkout-scale">
+  <main class="max-w-[1700px] mx-auto px-4 py-2 h-[calc(100vh-80px)]">
+
+    <div class="flex items-center justify-between mb-2">
+      <a href="/membership/" class="font-bold text-sm">
+        ← Back to Membership Plans
+      </a>
+
+      <p class="text-sm font-semibold text-gray-500">
+        Install the app to activate and manage membership
+      </p>
+    </div>
+
+    <section class="grid grid-cols-12 gap-3 h-[calc(100%-28px)]">
+
+      <div class="col-span-8 flex flex-col gap-3">
+
+        <div class="bg-white border-2 border-brandRed rounded-2xl p-4 shadow-sm">
+          <div class="grid grid-cols-12 gap-4 items-center">
+
+            <div class="col-span-2">
+              <div class="h-24 rounded-2xl border bg-brandRedSoft flex items-center justify-center text-5xl text-brandRed">
+                ☆
+              </div>
+            </div>
+
+            <div class="col-span-7">
+              <span class="bg-brandRed text-white px-4 py-1 rounded-full text-xs font-black">
+                YOU SELECTED
+              </span>
+
+              <h1 class="text-3xl font-black mt-2">
+                Silver Plan
+              </h1>
+
+              <p class="text-gray-600 font-medium mt-1">
+                More value with extra member perks
+              </p>
+
+              <div class="flex gap-8 mt-3">
+                <div>
+                  <h3 class="font-black">12 Months</h3>
+                  <p class="text-sm text-gray-500">Plan Duration</p>
+                </div>
+
+                <div>
+                  <h3 class="font-black">Extra Access</h3>
+                  <p class="text-sm text-gray-500">All Member Benefits</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-span-3 text-right">
+              <h2 class="text-3xl font-black">
+                ₹199
+              </h2>
+
+              <p class="text-sm font-semibold">
+                per month
+              </p>
+
+              <div class="mt-2 bg-brandYellowSoft rounded-xl p-2">
+                <p class="text-xs font-bold text-gray-600">
+                  Billed as
+                </p>
+
+                <h3 class="text-lg font-black text-brandRed">
+                  ₹2,388 / year
+                </h3>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="bg-white border border-yellow-100 rounded-2xl p-3 shadow-sm">
+          <h2 class="text-lg font-black mb-2">
+            What you get with Silver Plan
+          </h2>
+
+          <div class="grid grid-cols-4 gap-3">
+            <div class="benefit-card">
+              <div class="benefit-icon">◇</div>
+              <h3>Member Pricing</h3>
+              <p>Special pricing on products</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">△</div>
+              <h3>Early Access</h3>
+              <p>Access offers first</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">🔔</div>
+              <h3>Exclusive Updates</h3>
+              <p>Member-only deals</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">🛡️</div>
+              <h3>Priority Support</h3>
+              <p>Faster support help</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 bg-gradient-to-r from-yellow-50 to-white border border-yellow-200 rounded-2xl p-4 shadow-sm grid grid-cols-12 gap-4 items-center">
+
+          <div class="col-span-3">
+            <div class="phone-mockup">
+              <div class="phone-screen">
+                <h3 class="font-black text-base">
+                  Food<span class="text-brandRed">Club</span>
+                </h3>
+
+                <div class="mt-2 bg-brandYellow rounded-xl p-2 text-white">
+                  <p class="font-black">Fresh Food</p>
+                  <p class="text-xs">Order from app</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                  <div>🍗 Chicken</div>
+                  <div>🥩 Mutton</div>
+                  <div>🐟 Fish</div>
+                  <div>🌱 Soya</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-6">
+            <h2 class="text-2xl font-black leading-tight">
+              Continue in the <span class="text-brandRed">FoodClub App</span>
+            </h2>
+
+            <p class="text-gray-600 mt-2 font-medium text-sm">
+              To subscribe, pay securely, create your account and manage membership, install the app from Play Store.
+            </p>
+
+            <div class="grid grid-cols-2 gap-2 mt-3 text-sm font-bold">
+              <p>✅ Secure payments</p>
+              <p>✅ Order tracking</p>
+              <p>✅ App-only offers</p>
+              <p>✅ Account management</p>
+            </div>
+          </div>
+
+          <div class="col-span-3">
+            <div class="bg-white rounded-xl border border-yellow-200 p-3 w-24 h-24 grid grid-cols-5 gap-1 mx-auto">
+              <span class="bg-black"></span><span></span><span class="bg-black"></span><span></span><span class="bg-black"></span>
+              <span></span><span class="bg-black"></span><span></span><span class="bg-black"></span><span></span>
+              <span class="bg-black"></span><span></span><span class="bg-brandRed"></span><span></span><span class="bg-black"></span>
+              <span></span><span class="bg-black"></span><span></span><span class="bg-black"></span><span></span>
+              <span class="bg-black"></span><span></span><span class="bg-black"></span><span></span><span class="bg-black"></span>
+            </div>
+
+            <button class="mt-3 w-full bg-brandRed text-white rounded-xl py-2 text-sm font-black">
+              Download App
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <aside class="col-span-4 flex flex-col gap-3">
+
+        <div class="bg-brandYellowSoft border border-yellow-200 rounded-2xl p-4 shadow-sm">
+          <h2 class="text-lg font-black mb-3">
+            Plan Summary
+          </h2>
+
+          <div class="space-y-2 text-sm">
+            <div class="summary-row">
+              <span>Plan</span>
+              <strong>Silver Plan</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Duration</span>
+              <strong>12 Months</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Price</span>
+              <strong>₹2,388</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>GST</span>
+              <strong>₹430</strong>
+            </div>
+          </div>
+
+          <div class="border-t border-dashed border-yellow-400 mt-3 pt-3 flex justify-between items-center">
+            <span class="font-black">Total</span>
+            <strong class="text-2xl text-brandRed">₹2,818</strong>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-icon">🛡️</div>
+          <div>
+            <h3>No Auto-Renewal</h3>
+            <p>Renew only when you choose.</p>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-icon">✓</div>
+          <div>
+            <h3>Cancel Anytime</h3>
+            <p>Upgrade or cancel from app.</p>
+          </div>
+        </div>
+
+        <div class="flex-1 bg-white border border-red-100 rounded-2xl p-4 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-full bg-brandYellow flex items-center justify-center text-2xl">
+              👑
+            </div>
+
+            <h2 class="text-xl font-black mt-3 leading-tight">
+              Get the best experience with the app
+            </h2>
+
+            <p class="text-gray-600 mt-2 text-sm">
+              Install the app to subscribe, pay securely and manage your FoodClub membership.
+            </p>
+          </div>
+
+          <button class="w-full bg-brandRed text-white rounded-xl py-2 font-black">
+            Get App from Play Store
+          </button>
+        </div>
+
+      </aside>
+
+    </section>
+
+  </main>
+  </div>
+
+</body>
+</html>

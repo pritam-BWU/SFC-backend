@@ -1,0 +1,31 @@
+<header class="h-20 bg-white border-b shadow-sm flex items-center justify-between px-10">
+  <div>
+    <h1 class="text-4xl font-black leading-none">
+      Food<span class="text-red-600">Club</span>
+    </h1>
+    <p class="text-xs font-medium text-gray-500">Better Food. Better You.</p>
+  </div>
+
+  <nav class="flex gap-10 font-semibold">
+    <a href="/" class="{% if request.path == '/' %}text-red-600 border-b-4 border-red-600 pb-6{% endif %}">
+      Home
+    </a>
+
+    <a href="#">Categories</a>
+
+    <a href="/membership/" class="{% if request.path == '/membership/' %}text-red-600 border-b-4 border-red-600 pb-6{% endif %}">
+      Membership
+    </a>
+
+    <a href="#">Refer & Earn</a>
+  </nav>
+
+  <div class="flex items-center gap-6">
+    <div class="w-[380px] h-11 border rounded-xl flex items-center px-4">
+      <input class="w-full outline-none text-sm" placeholder="Search for meat, soya & more..." />
+      <span class="text-xl">⌕</span>
+    </div>
+
+    <span class="text-2xl">🔔</span>
+  </div>
+</header>

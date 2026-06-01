@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FoodClub Membership</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandYellow: "#F7A31C",
+            brandYellowSoft: "#FFF5DC",
+            brandRed: "#E53935",
+            brandRedSoft: "#FFF0EF",
+            pageBg: "#FFFDF8",
+            darkText: "#191919"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-pageBg text-darkText">
+
+  {% include 'components/navbar.html' %}
+
+  <main class="px-8 py-6">
+
+    <!-- PAGE TITLE -->
+    <section class="text-center mb-6">
+      <p class="text-brandRed font-bold uppercase tracking-[0.25em] text-sm">
+        Membership Plans
+      </p>
+
+      <h1 class="text-4xl font-black mt-2">
+        Choose Your Membership Category
+      </h1>
+
+      <p class="text-gray-500 mt-2 text-base">
+        Select the right plan and unlock better member pricing.
+      </p>
+    </section>
+
+    <!-- REFUNDABLE SECTION -->
+    <section class="rounded-3xl bg-white border border-yellow-200 shadow-sm p-5 mb-6">
+
+      <div class="flex items-center justify-between gap-6 mb-5">
+        <div class="flex items-center gap-5">
+          <div class="w-16 h-16 rounded-2xl bg-brandYellow flex items-center justify-center text-3xl shadow">
+            🛡️
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-black text-brandYellow">
+              Flexible Membership Access
+            </h2>
+
+            <div class="flex gap-2 mt-2">
+              <span class="px-4 py-1 rounded-full bg-brandYellowSoft text-brandYellow text-xs font-black">
+                REFUNDABLE
+              </span>
+
+              <span class="px-4 py-1 rounded-full bg-brandYellowSoft text-brandYellow text-xs font-black">
+                5 YEAR VALIDITY
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="max-w-xl text-gray-500 text-sm leading-relaxed">
+          Flexible membership with 5 years validity and eligible member-oriented benefits.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-5 gap-4">
+        <div class="plan-card border-yellow-100">
+          <div>
+            <div class="plan-icon bg-brandYellowSoft">🥉</div>
+            <h3>Bronze</h3>
+            <p>Light Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandYellow">10% - 15%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ 5-Year Validity</li>
+            <li>✓ Refundable as per policy</li>
+          </ul>
+<a
+  href="{% url 'plan_checkout' %}"
+  class="block w-full text-center bg-brandYellow hover:bg-yellow-500 text-white font-black rounded-xl py-3 transition"
+>
+  Choose Plan
+</a>
+        </div>
+
+        <div class="plan-card border-yellow-100">
+          <div>
+            <div class="plan-icon bg-brandYellowSoft">🥈</div>
+            <h3>Silver</h3>
+            <p>Moderate Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandYellow">15% - 20%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ 5-Year Validity</li>
+            <li>✓ Refundable as per policy</li>
+          </ul>
+<a
+  href="{% url 'plan_checkout' %}"
+  class="block w-full text-center bg-brandYellow hover:bg-yellow-500 text-white font-black rounded-xl py-3 transition"
+>
+  Choose Plan
+</a>
+        </div>
+
+        <div class="plan-card border-yellow-100">
+          <div>
+            <div class="plan-icon bg-brandYellowSoft">🥇</div>
+            <h3>Gold</h3>
+            <p>Family Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandYellow">20% - 25%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ 5-Year Validity</li>
+            <li>✓ Refundable as per policy</li>
+          </ul>
+<a
+  href="{% url 'plan_checkout' %}"
+  class="block w-full text-center bg-brandYellow hover:bg-yellow-500 text-white font-black rounded-xl py-3 transition"
+>
+  Choose Plan
+</a>
+        </div>
+
+        <div class="plan-card border-yellow-100">
+          <div>
+            <div class="plan-icon bg-brandYellowSoft">💠</div>
+            <h3>Platinum</h3>
+            <p>High Household Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandYellow">25% - 30%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ 5-Year Validity</li>
+            <li>✓ Refundable as per policy</li>
+          </ul>
+<a
+  href="{% url 'plan_checkout' %}"
+  class="block w-full text-center bg-brandYellow hover:bg-yellow-500 text-white font-black rounded-xl py-3 transition"
+>
+  Choose Plan
+</a>
+        </div>
+
+        <div class="plan-card border-yellow-100 ring-2 ring-yellow-200">
+          <div>
+            <div class="plan-icon bg-brandYellowSoft">💎</div>
+            <h3>Diamond</h3>
+            <p>Premium Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandRed">Up to 30%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ 5-Year Validity</li>
+            <li>✓ Refundable as per policy</li>
+          </ul>
+<a
+  href="{% url 'plan_checkout' %}"
+  class="block w-full text-center bg-brandYellow hover:bg-yellow-500 text-white font-black rounded-xl py-3 transition"
+>
+  Choose Plan
+</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NON REFUNDABLE SECTION -->
+    <section class="rounded-3xl bg-white border border-red-100 shadow-sm p-5">
+
+      <div class="flex items-center justify-between gap-6 mb-5">
+        <div class="flex items-center gap-5">
+          <div class="w-16 h-16 rounded-2xl bg-brandRed flex items-center justify-center text-3xl shadow text-white">
+            💎
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-black text-brandRed">
+              Long-Duration Membership Access
+            </h2>
+
+            <div class="flex gap-2 mt-2">
+              <span class="px-4 py-1 rounded-full bg-brandRedSoft text-brandRed text-xs font-black">
+                NON-REFUNDABLE
+              </span>
+
+              <span class="px-4 py-1 rounded-full bg-brandRedSoft text-brandRed text-xs font-black">
+                EXTENDED VALIDITY
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="max-w-xl text-gray-500 text-sm leading-relaxed">
+          Extended validity membership with enhanced benefits and higher pricing eligibility.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-5 gap-4">
+        <div class="plan-card border-red-100">
+          <div>
+            <div class="plan-icon bg-brandRedSoft">🥉</div>
+            <h3>Bronze</h3>
+            <p>Light Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandRed">20% - 25%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ Extended Validity</li>
+            <li>✓ Non-Refundable</li>
+          </ul>
+
+          <button class="bg-brandRed hover:bg-red-600">
+            Choose Plan
+          </button>
+        </div>
+
+        <div class="plan-card border-red-100">
+          <div>
+            <div class="plan-icon bg-brandRedSoft">🥈</div>
+            <h3>Silver</h3>
+            <p>Moderate Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandRed">25% - 30%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ Extended Validity</li>
+            <li>✓ Non-Refundable</li>
+          </ul>
+
+          <button class="bg-brandRed hover:bg-red-600">
+            Choose Plan
+          </button>
+        </div>
+
+        <div class="plan-card border-red-100">
+          <div>
+            <div class="plan-icon bg-brandRedSoft">🥇</div>
+            <h3>Gold</h3>
+            <p>Family Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandRed">30% - 35%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ Extended Validity</li>
+            <li>✓ Non-Refundable</li>
+          </ul>
+
+          <button class="bg-brandRed hover:bg-red-600">
+            Choose Plan
+          </button>
+        </div>
+
+        <div class="plan-card border-red-100">
+          <div>
+            <div class="plan-icon bg-brandRedSoft">💠</div>
+            <h3>Platinum</h3>
+            <p>High Household Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandRed">35% - 40%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ Extended Validity</li>
+            <li>✓ Non-Refundable</li>
+          </ul>
+
+          <button class="bg-brandRed hover:bg-red-600">
+            Choose Plan
+          </button>
+        </div>
+
+        <div class="plan-card border-red-100 ring-2 ring-red-100">
+          <div>
+            <div class="plan-icon bg-brandRedSoft">💎</div>
+            <h3>Diamond</h3>
+            <p>Premium Usage</p>
+          </div>
+
+          <div>
+            <strong class="text-brandRed">Up to 40%</strong>
+            <small>Member Pricing Eligibility</small>
+          </div>
+
+          <ul>
+            <li>✓ Extended Validity</li>
+            <li>✓ Non-Refundable</li>
+          </ul>
+
+          <button class="bg-brandRed hover:bg-red-600">
+            Choose Plan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    {% include 'components/footer.html' %}
+
+  </main>
+
+  <style>
+    .plan-card {
+      min-height: 245px;
+      background: #ffffff;
+      border-width: 1px;
+      border-radius: 22px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.045);
+      transition: all 0.2s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.08);
+    }
+
+    .plan-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .plan-card h3 {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .plan-card p {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 3px;
+    }
+
+    .plan-card strong {
+      display: block;
+      font-size: 22px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .plan-card small {
+      display: block;
+      margin-top: 5px;
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .plan-card ul {
+      border-top: 1px solid #f0e7da;
+      padding-top: 10px;
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .plan-card button {
+      width: 100%;
+      color: white;
+      font-weight: 900;
+      border-radius: 14px;
+      padding: 11px 14px;
+      transition: all 0.2s ease;
+    }
+  </style>
+
+</body>
+</html>

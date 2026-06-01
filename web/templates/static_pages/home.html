@@ -1,0 +1,482 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodClub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'DM Sans', sans-serif; }
+    h1,h2,h3,.font-black { font-family: 'Syne', sans-serif; }
+
+    /* ── Hero Slider ── */
+    .hero-track { display: flex; transition: transform 0.7s cubic-bezier(.77,0,.18,1); }
+    .hero-slide { min-width: 100%; position: relative; height: 340px; border-radius: 1.5rem; overflow: hidden; flex-shrink: 0; }
+    .hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-slide .overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,.78) 0%, rgba(0,0,0,.42) 55%, transparent 100%); }
+    .hero-slide .content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem; color: #fff; }
+    .slide-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.4); border: none; cursor: pointer; padding: 0; transition: background .3s, transform .3s; }
+    .slide-dot.active { background: #ffb631; transform: scale(1.35); }
+
+    /* ── Infinite Category Ticker ── */
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .cat-ticker { display: flex; animation: ticker 22s linear infinite; width: max-content; }
+    .cat-ticker:hover { animation-play-state: paused; }
+    .cat-card {
+      flex-shrink: 0;
+      width: 160px;
+      margin-right: 16px;
+      background: #fff;
+      border-radius: 1.25rem;
+      padding: 1.25rem 1rem;
+      border: 1px solid #f0ede8;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .cat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.1); }
+    .cat-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+
+    /* ── Product Card ── */
+    .prod-card { background: #fff; border-radius: 1.25rem; overflow: hidden; border: 1px solid #f0ede8; box-shadow: 0 1px 3px rgba(0,0,0,.05); transition: transform .25s, box-shadow .25s; }
+    .prod-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+    .prod-img { height: 145px; width: 100%; object-fit: cover; background: #f5f2ee; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+
+    /* ── Benefits bar ── */
+    .benefit { background: #fff; border-radius: 1rem; padding: 1rem 1.25rem; border: 1px solid #f0ede8; display: flex; align-items: center; gap: .75rem; }
+    .benefit-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+
+    /* ── Recipe images ── */
+    .recipe-img { border-radius: 1.25rem; height: 150px; width: 100%; object-fit: cover; background: #f5f2ee; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+
+    /* ── Navbar ── */
+    nav { background: #fff; border-bottom: 1px solid #f0ede8; }
+  </style>
+</head>
+
+<body class="bg-[#faf9f7] text-gray-900 overflow-x-hidden">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50">
+    <div class="max-w-[1440px] mx-auto px-6 h-[62px] flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span style="font-family:Syne;font-weight:900;font-size:1.4rem;color:#ff6f4d;">Food<span style="color:#1a1a1a;">Club</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="#" class="hover:text-orange-500 transition">Home</a>
+        <a href="#" class="hover:text-orange-500 transition">Products</a>
+        <a href="#" class="hover:text-orange-500 transition">Recipes</a>
+        <a href="/membership/" class="hover:text-orange-500 transition">Membership</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="p-2 rounded-xl hover:bg-gray-100 transition" aria-label="Search">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="p-2 rounded-xl hover:bg-gray-100 transition relative" aria-label="Cart">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="absolute top-1 right-1 w-4 h-4 bg-[#ff6f4d] rounded-full text-white text-[9px] font-bold flex items-center justify-center">3</span>
+        </button>
+        <a href="#" class="bg-[#1a1a1a] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-[#333] transition">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-[1440px] mx-auto px-6 py-5">
+
+    <!-- ═══════════════════════════════════════
+         HERO SLIDER + CATEGORY CARDS
+    ═══════════════════════════════════════ -->
+    <section class="grid grid-cols-12 gap-5">
+
+      <!-- Hero Slider -->
+      <div class="col-span-7 relative overflow-hidden rounded-3xl shadow-sm" style="height:340px;">
+        <div id="heroTrack" class="hero-track h-full">
+
+          <!-- Slide 1 -->
+          <div class="hero-slide">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#7c3a1e] via-[#b05530] to-[#e8763a]"></div>
+            <div class="absolute inset-0" style="background:url('https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=900&q=80') center/cover no-repeat; opacity:.55;"></div>
+            <div class="overlay"></div>
+            <div class="content">
+              <p class="text-xs font-semibold uppercase tracking-[.25em] text-[#ffb631]">Fresh · Hygienic · Premium</p>
+              <h1 class="mt-3 text-5xl font-black leading-tight" style="font-family:Syne;">Better Food.<br/>Better You.</h1>
+              <p class="mt-4 max-w-sm text-sm text-white/85">Premium raw chicken, soya, paneer and processed food delivered fresh to your door.</p>
+              <div class="mt-6 flex gap-3">
+                <a href="#" class="bg-[#ffb631] text-black px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#ffca5e] transition">Explore Products</a>
+                <a href="/membership/" class="bg-white/15 backdrop-blur text-white px-6 py-3 rounded-xl font-bold text-sm border border-white/25 hover:bg-white/25 transition">Membership</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="hero-slide">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#1a4a2e] via-[#2a7a48] to-[#4caf72]"></div>
+            <div class="absolute inset-0" style="background:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80') center/cover no-repeat; opacity:.5;"></div>
+            <div class="overlay"></div>
+            <div class="content">
+              <p class="text-xs font-semibold uppercase tracking-[.25em] text-[#7fff9a]">Protein · Power · Plant</p>
+              <h1 class="mt-3 text-5xl font-black leading-tight" style="font-family:Syne;">Go Green.<br/>Stay Strong.</h1>
+              <p class="mt-4 max-w-sm text-sm text-white/85">High-protein soyabin and fresh paneer — perfect for a balanced, healthy lifestyle.</p>
+              <div class="mt-6 flex gap-3">
+                <a href="#" class="bg-[#4caf72] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#3d9960] transition">Shop Veg Range</a>
+                <a href="/membership/" class="bg-white/15 backdrop-blur text-white px-6 py-3 rounded-xl font-bold text-sm border border-white/25 hover:bg-white/25 transition">Get Deals</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="hero-slide">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#2d2d5e] to-[#4a4aaa]"></div>
+            <div class="absolute inset-0" style="background:url('https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=900&q=80') center/cover no-repeat; opacity:.5;"></div>
+            <div class="overlay"></div>
+            <div class="content">
+              <p class="text-xs font-semibold uppercase tracking-[.25em] text-[#c5b8ff]">Ready · Quick · Delicious</p>
+              <h1 class="mt-3 text-5xl font-black leading-tight" style="font-family:Syne;">Ready to Cook.<br/>Loved by All.</h1>
+              <p class="mt-4 max-w-sm text-sm text-white/85">Processed chicken snacks and ready-to-cook favourites — done in minutes, loved every time.</p>
+              <div class="mt-6 flex gap-3">
+                <a href="#" class="bg-[#c5b8ff] text-[#1a1a2e] px-6 py-3 rounded-xl font-bold text-sm hover:bg-white transition">Shop Processed</a>
+                <a href="/membership/" class="bg-white/15 backdrop-blur text-white px-6 py-3 rounded-xl font-bold text-sm border border-white/25 hover:bg-white/25 transition">Join Club</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="hero-slide">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#4a1a00] via-[#8b3a12] to-[#d4601e]"></div>
+            <div class="absolute inset-0" style="background:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&q=80') center/cover no-repeat; opacity:.45;"></div>
+            <div class="overlay"></div>
+            <div class="content">
+              <p class="text-xs font-semibold uppercase tracking-[.25em] text-[#ffb631]">Members · Save More · Always</p>
+              <h1 class="mt-3 text-5xl font-black leading-tight" style="font-family:Syne;">Club Prices.<br/>Zero Compromise.</h1>
+              <p class="mt-4 max-w-sm text-sm text-white/85">Join FoodClub membership and unlock exclusive pricing on every single order, every day.</p>
+              <div class="mt-6 flex gap-3">
+                <a href="/membership/" class="bg-[#ffb631] text-black px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#ffca5e] transition">View Plans 👑</a>
+                <a href="#" class="bg-white/15 backdrop-blur text-white px-6 py-3 rounded-xl font-bold text-sm border border-white/25 hover:bg-white/25 transition">Learn More</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Prev / Next arrows -->
+        <button id="heroPrev" aria-label="Previous slide" onclick="heroGo(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/35 hover:bg-black/60 transition flex items-center justify-center text-white z-10">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button id="heroNext" aria-label="Next slide" onclick="heroGo(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/35 hover:bg-black/60 transition flex items-center justify-center text-white z-10">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        <!-- Dots -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="heroDots">
+          <button class="slide-dot active" onclick="heroGoTo(0)"></button>
+          <button class="slide-dot" onclick="heroGoTo(1)"></button>
+          <button class="slide-dot" onclick="heroGoTo(2)"></button>
+          <button class="slide-dot" onclick="heroGoTo(3)"></button>
+        </div>
+      </div>
+
+      <!-- Category Quick Links -->
+      <div class="col-span-5 grid grid-cols-2 gap-4">
+        <a href="#" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+          <div class="cat-icon bg-orange-50">🍗</div>
+          <h3 class="mt-4 text-lg font-black" style="font-family:Syne;">Raw Chicken Meat</h3>
+          <p class="mt-1 text-sm text-gray-500">Fresh cuts for daily cooking</p>
+        </a>
+        <a href="#" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+          <div class="cat-icon bg-green-50">🌱</div>
+          <h3 class="mt-4 text-lg font-black" style="font-family:Syne;">Soyabin</h3>
+          <p class="mt-1 text-sm text-gray-500">Protein-rich veg option</p>
+        </a>
+        <a href="#" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+          <div class="cat-icon bg-yellow-50">🧀</div>
+          <h3 class="mt-4 text-lg font-black" style="font-family:Syne;">Paneer</h3>
+          <p class="mt-1 text-sm text-gray-500">Soft and fresh dairy protein</p>
+        </a>
+        <a href="#" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+          <div class="cat-icon bg-red-50">🍖</div>
+          <h3 class="mt-4 text-lg font-black" style="font-family:Syne;">Processed Chicken</h3>
+          <p class="mt-1 text-sm text-gray-500">Ready-to-cook favourites</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         INFINITE CATEGORY TICKER
+    ═══════════════════════════════════════ -->
+    <section class="mt-6 overflow-hidden">
+      <div class="cat-ticker">
+        <!-- Set 1 -->
+        <div class="cat-card">
+          <div class="cat-icon bg-orange-50">🍗</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Raw Chicken</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Fresh daily cuts</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-amber-50">🥚</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Eggs</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Farm-fresh eggs</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-green-50">🌱</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Soyabin</h4>
+          <p class="text-xs text-gray-400 mt-0.5">High protein veg</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-yellow-50">🧀</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Paneer</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Soft dairy protein</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-red-50">🍖</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Processed Chicken</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Ready to cook</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-blue-50">🥛</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Dairy</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Milk & curd</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-pink-50">🍗</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Chicken Breast</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Boneless premium</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-purple-50">🌾</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Soya Chunks</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Textured protein</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-orange-50">🍗</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Chicken Legs</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Juicy leg pieces</p>
+        </div>
+        <!-- Set 2 – exact duplicate for seamless loop -->
+        <div class="cat-card">
+          <div class="cat-icon bg-orange-50">🍗</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Raw Chicken</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Fresh daily cuts</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-amber-50">🥚</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Eggs</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Farm-fresh eggs</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-green-50">🌱</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Soyabin</h4>
+          <p class="text-xs text-gray-400 mt-0.5">High protein veg</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-yellow-50">🧀</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Paneer</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Soft dairy protein</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-red-50">🍖</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Processed Chicken</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Ready to cook</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-blue-50">🥛</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Dairy</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Milk & curd</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-pink-50">🍗</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Chicken Breast</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Boneless premium</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-purple-50">🌾</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Soya Chunks</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Textured protein</p>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon bg-orange-50">🍗</div>
+          <h4 class="mt-3 font-black text-sm" style="font-family:Syne;">Chicken Legs</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Juicy leg pieces</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         BENEFITS BAR
+    ═══════════════════════════════════════ -->
+    <section class="grid grid-cols-4 gap-4 mt-6">
+      <div class="benefit">
+        <div class="benefit-icon bg-orange-50">📦</div>
+        <div><h3 class="font-bold text-sm">Freshly Packed</h3><p class="text-xs text-gray-500 mt-0.5">Quality checked products</p></div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon bg-blue-50">🚀</div>
+        <div><h3 class="font-bold text-sm">Fast Delivery</h3><p class="text-xs text-gray-500 mt-0.5">Quick doorstep delivery</p></div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon bg-yellow-50">💰</div>
+        <div><h3 class="font-bold text-sm">Member Pricing</h3><p class="text-xs text-gray-500 mt-0.5">Save more every order</p></div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-icon bg-green-50">✅</div>
+        <div><h3 class="font-bold text-sm">Trusted Quality</h3><p class="text-xs text-gray-500 mt-0.5">Premium family products</p></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         TOP PICKS + MEMBERSHIP
+    ═══════════════════════════════════════ -->
+    <section class="mt-8">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-2xl font-black" style="font-family:Syne;">Top Picks</h2>
+          <p class="text-sm text-gray-500">Popular products for today</p>
+        </div>
+        <a href="#" class="text-sm font-bold text-orange-500 hover:text-orange-600 transition">View All →</a>
+      </div>
+
+      <div class="grid grid-cols-5 gap-4">
+
+        <div class="prod-card">
+          <div class="prod-img">🍗</div>
+          <div class="p-4">
+            <h3 class="font-black text-base" style="font-family:Syne;">Chicken Breast</h3>
+            <p class="text-xs text-gray-400 mt-1">500 g · Boneless</p>
+            <div class="mt-3 flex items-center justify-between">
+              <span class="font-black text-lg">₹180</span>
+              <span class="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-semibold">Member ₹160</span>
+            </div>
+            <button class="mt-3 w-full bg-[#1a1a1a] text-white rounded-xl py-2 text-sm font-semibold hover:bg-[#333] transition">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img">🌱</div>
+          <div class="p-4">
+            <h3 class="font-black text-base" style="font-family:Syne;">Soyabin Chunks</h3>
+            <p class="text-xs text-gray-400 mt-1">1 kg · High protein</p>
+            <div class="mt-3 flex items-center justify-between">
+              <span class="font-black text-lg">₹140</span>
+              <span class="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-semibold">Member ₹125</span>
+            </div>
+            <button class="mt-3 w-full bg-[#1a1a1a] text-white rounded-xl py-2 text-sm font-semibold hover:bg-[#333] transition">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img">🧀</div>
+          <div class="p-4">
+            <h3 class="font-black text-base" style="font-family:Syne;">Fresh Paneer</h3>
+            <p class="text-xs text-gray-400 mt-1">500 g · Soft &amp; creamy</p>
+            <div class="mt-3 flex items-center justify-between">
+              <span class="font-black text-lg">₹210</span>
+              <span class="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-semibold">Member ₹190</span>
+            </div>
+            <button class="mt-3 w-full bg-[#1a1a1a] text-white rounded-xl py-2 text-sm font-semibold hover:bg-[#333] transition">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img">🍖</div>
+          <div class="p-4">
+            <h3 class="font-black text-base" style="font-family:Syne;">Chicken Nuggets</h3>
+            <p class="text-xs text-gray-400 mt-1">400 g · Ready to fry</p>
+            <div class="mt-3 flex items-center justify-between">
+              <span class="font-black text-lg">₹240</span>
+              <span class="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-semibold">Member ₹220</span>
+            </div>
+            <button class="mt-3 w-full bg-[#1a1a1a] text-white rounded-xl py-2 text-sm font-semibold hover:bg-[#333] transition">Add to Cart</button>
+          </div>
+        </div>
+
+        <!-- Membership Card -->
+        <div class="bg-[#fff4df] rounded-2xl p-5 border border-orange-100 flex flex-col justify-between shadow-sm">
+          <div>
+            <div class="text-4xl">👑</div>
+            <h3 class="mt-3 text-xl font-black" style="font-family:Syne;">Join Membership</h3>
+            <p class="text-sm text-gray-600 mt-2">Unlock better prices and exclusive rewards every order.</p>
+            <ul class="mt-3 space-y-1">
+              <li class="text-xs text-gray-600 flex items-center gap-1.5"><span class="text-green-500">✓</span> Exclusive member prices</li>
+              <li class="text-xs text-gray-600 flex items-center gap-1.5"><span class="text-green-500">✓</span> Priority delivery</li>
+              <li class="text-xs text-gray-600 flex items-center gap-1.5"><span class="text-green-500">✓</span> Monthly bonus credits</li>
+            </ul>
+          </div>
+          <a href="/membership/" class="mt-5 bg-[#ff6f4d] text-white rounded-xl py-3 text-center text-sm font-bold hover:bg-[#e55a38] transition block">View Plans</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         RECIPES
+    ═══════════════════════════════════════ -->
+    <section class="mt-8 grid grid-cols-12 gap-4 items-stretch">
+
+      <div class="col-span-4 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <p class="text-xs font-semibold uppercase tracking-[.2em] text-orange-500">Inspiration</p>
+        <h2 class="mt-2 text-2xl font-black leading-tight" style="font-family:Syne;">Easy meals for every day</h2>
+        <p class="mt-3 text-sm text-gray-500">Explore simple recipes using fresh chicken, paneer and soya products — ready in under 30 minutes.</p>
+        <a href="#" class="inline-block mt-5 text-sm font-bold text-orange-500 hover:text-orange-600 transition">Explore Recipes →</a>
+      </div>
+
+      <div class="col-span-8 grid grid-cols-4 gap-4">
+        <div class="recipe-img">🍛</div>
+        <div class="recipe-img">🥘</div>
+        <div class="recipe-img">🥗</div>
+        <div class="recipe-img">🍱</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-12 border-t border-gray-100 bg-white">
+    <div class="max-w-[1440px] mx-auto px-6 py-8 flex items-center justify-between text-sm text-gray-500">
+      <span style="font-family:Syne;font-weight:900;font-size:1.2rem;color:#ff6f4d;">Food<span style="color:#1a1a1a;">Club</span></span>
+      <p>© 2025 FoodClub. Fresh food, delivered.</p>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-gray-800 transition">Privacy</a>
+        <a href="#" class="hover:text-gray-800 transition">Terms</a>
+        <a href="#" class="hover:text-gray-800 transition">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Hero Auto-Slider ──────────────────────────────
+    const track   = document.getElementById('heroTrack');
+    const dots    = document.querySelectorAll('.slide-dot');
+    const total   = 4;
+    let current   = 0;
+    let timer;
+
+    function heroGoTo(idx) {
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function heroGo(dir) {
+      clearInterval(timer);
+      heroGoTo(current + dir);
+      startTimer();
+    }
+
+    function startTimer() {
+      timer = setInterval(() => heroGoTo(current + 1), 4500);
+    }
+
+    startTimer();
+
+    // pause on hover
+    document.querySelector('.col-span-7').addEventListener('mouseenter', () => clearInterval(timer));
+    document.querySelector('.col-span-7').addEventListener('mouseleave', startTimer);
+  </script>
+
+</body>
+</html>
