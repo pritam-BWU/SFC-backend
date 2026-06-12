@@ -1,0 +1,56 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Send Notification{% endblock %}
+{% block breadcrumb %}Dashboard / Notifications / Send Notification{% endblock %}
+{% block page_title %}Send Notification{% endblock %}
+
+{% block content %}
+<div class="grid gap-5 xl:grid-cols-[1fr_360px]">
+    <section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold">Send To</p>
+        <div class="mt-4 grid gap-3 text-sm md:grid-cols-3">
+            <label class="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-3"><input type="radio" name="send_to"> Individual Member</label>
+            <label class="flex items-center gap-2 rounded-lg border border-violet-200 bg-violet-50 px-4 py-3 text-violet-800"><input type="radio" name="send_to" checked> Member Category</label>
+            <label class="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-3"><input type="radio" name="send_to"> Membership Type</label>
+        </div>
+
+        <form class="mt-5 space-y-5">
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Select Category</label>
+                <select class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm"><option>Flexible Membership Access (Refundable)</option><option>Long-Duration Membership Access</option></select>
+            </div>
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Title</label>
+                <input value="Monthly Update" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm">
+            </div>
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Message</label>
+                <textarea rows="7" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm">Hello Members,
+
+We have some exciting updates for you. Check out the app for more details.
+
+Thank you!</textarea>
+            </div>
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Add Deep Link</label>
+                <input placeholder="Enter screen link here" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button type="button" class="rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-semibold">Preview</button>
+                <button type="button" class="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white">Send Now</button>
+            </div>
+        </form>
+    </section>
+
+    <aside class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold">Preview</p>
+        <div class="mx-auto mt-5 flex h-[520px] max-w-[260px] flex-col justify-end rounded-[2rem] bg-slate-950 p-5 text-white shadow-lg">
+            <div class="mb-8 rounded-2xl bg-white/95 p-4 text-slate-900">
+                <p class="text-xs font-semibold">SuperFlow Food Club</p>
+                <p class="mt-2 text-sm font-semibold">Monthly Update</p>
+                <p class="mt-1 text-xs text-slate-600">Hello Members, we have some exciting updates for you.</p>
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}

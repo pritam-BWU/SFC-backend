@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFC Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="grid min-h-screen lg:grid-cols-[1fr_480px]">
+        <section class="hidden bg-slate-950 px-12 py-10 text-white lg:flex lg:flex-col lg:justify-between">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-teal-300">SFC Member Portal</p>
+                <h1 class="mt-8 max-w-2xl text-5xl font-semibold leading-tight">Secure dashboard access for active club members.</h1>
+            </div>
+            <div class="grid max-w-3xl grid-cols-3 gap-4">
+                <div class="rounded-lg border border-white/10 bg-white/5 p-5">
+                    <p class="text-2xl font-semibold">01</p>
+                    <p class="mt-2 text-sm text-slate-300">Subscription status</p>
+                </div>
+                <div class="rounded-lg border border-white/10 bg-white/5 p-5">
+                    <p class="text-2xl font-semibold">02</p>
+                    <p class="mt-2 text-sm text-slate-300">Membership profile</p>
+                </div>
+                <div class="rounded-lg border border-white/10 bg-white/5 p-5">
+                    <p class="text-2xl font-semibold">03</p>
+                    <p class="mt-2 text-sm text-slate-300">Payment record</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex items-center justify-center px-5 py-12">
+            <div class="w-full max-w-md rounded-xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
+                <div class="mb-8">
+                    <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Welcome back</p>
+                    <h2 class="mt-2 text-3xl font-semibold text-slate-950">Login</h2>
+                    <p class="mt-2 text-sm text-slate-500">Use your member username and password to continue.</p>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <form method="post" class="space-y-5">
+                    {% csrf_token %}
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.username.errors|striptags }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.password.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Password</label>
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.password.errors|striptags }}</p>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="w-full rounded-lg bg-teal-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-200">Login</button>
+                </form>
+
+                <div class="mt-6 rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
+                    <p class="font-medium text-slate-800">Demo credentials</p>
+                    <p class="mt-1">Username: demo_user</p>
+                    <p>Password: Demo@123</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

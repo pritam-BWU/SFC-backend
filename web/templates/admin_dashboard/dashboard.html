@@ -1,0 +1,96 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm text-slate-500">Total Registered Users</p>
+        <p class="mt-3 text-3xl font-semibold">{{ total_users }}</p>
+        <p class="mt-2 text-xs text-emerald-600">Active users: {{ active_users }}</p>
+    </article>
+    <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm text-slate-500">Total Members</p>
+        <p class="mt-3 text-3xl font-semibold">{{ active_users }}</p>
+        <p class="mt-2 text-xs text-emerald-600">Verified profiles</p>
+    </article>
+    <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm text-slate-500">Flexible Members</p>
+        <p class="mt-3 text-3xl font-semibold">{{ flexible_members }}</p>
+        <p class="mt-2 text-xs text-blue-600">Refundable plans</p>
+    </article>
+    <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm text-slate-500">Long-Duration Members</p>
+        <p class="mt-3 text-3xl font-semibold">{{ long_duration_members }}</p>
+        <p class="mt-2 text-xs text-amber-600">Non-refundable plans</p>
+    </article>
+</div>
+
+<div class="mt-4 grid gap-4 lg:grid-cols-[1fr_360px]">
+    <section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <p class="text-sm font-semibold text-slate-950">Membership Overview</p>
+                <p class="text-xs text-slate-500">Plan distribution and operating totals</p>
+            </div>
+            <a href="{% url 'admin_membership_dashboard' %}" class="rounded-md border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">View All</a>
+        </div>
+        <div class="mt-6 grid gap-5 xl:grid-cols-2">
+            <div class="grid gap-4 sm:grid-cols-[150px_1fr]">
+                <div class="flex h-36 w-36 items-center justify-center rounded-full" style="background: conic-gradient(#f97316 0 30%, #facc15 30% 58%, #3b82f6 58% 80%, #8b5cf6 80% 100%);">
+                    <div class="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white">
+                        <span class="text-2xl font-semibold">{{ flexible_members }}</span>
+                        <span class="text-xs text-slate-500">Flexible</span>
+                    </div>
+                </div>
+                <dl class="space-y-3 text-sm">
+                    <div class="flex justify-between gap-4"><dt>Bronze</dt><dd class="font-medium">30%</dd></div>
+                    <div class="flex justify-between gap-4"><dt>Silver</dt><dd class="font-medium">24%</dd></div>
+                    <div class="flex justify-between gap-4"><dt>Gold</dt><dd class="font-medium">26%</dd></div>
+                    <div class="flex justify-between gap-4"><dt>Platinum</dt><dd class="font-medium">20%</dd></div>
+                </dl>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-[150px_1fr]">
+                <div class="flex h-36 w-36 items-center justify-center rounded-full" style="background: conic-gradient(#f97316 0 24%, #facc15 24% 54%, #3b82f6 54% 79%, #8b5cf6 79% 100%);">
+                    <div class="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white">
+                        <span class="text-2xl font-semibold">{{ long_duration_members }}</span>
+                        <span class="text-xs text-slate-500">Long</span>
+                    </div>
+                </div>
+                <dl class="space-y-3 text-sm">
+                    <div class="flex justify-between gap-4"><dt>Bronze</dt><dd class="font-medium">34%</dd></div>
+                    <div class="flex justify-between gap-4"><dt>Silver</dt><dd class="font-medium">33%</dd></div>
+                    <div class="flex justify-between gap-4"><dt>Gold</dt><dd class="font-medium">26%</dd></div>
+                    <div class="flex justify-between gap-4"><dt>Diamond</dt><dd class="font-medium">7%</dd></div>
+                </dl>
+            </div>
+        </div>
+    </section>
+
+    <aside class="space-y-4">
+        <section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-semibold text-slate-950">Quick Actions</p>
+            <div class="mt-4 grid gap-3">
+                <a href="{% url 'admin_registered_users' %}" class="rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium hover:bg-slate-50">Add New Member</a>
+                <a href="{% url 'admin_membership_requests' %}" class="rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium hover:bg-slate-50">Approve Requests</a>
+                <a href="{% url 'admin_send_notification' %}" class="rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium hover:bg-slate-50">Send Notification</a>
+            </div>
+        </section>
+        <section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-semibold text-slate-950">Recent Activity</p>
+            <div class="mt-4 space-y-4">
+                {% for profile in recent_profiles %}
+                    <div class="border-b border-slate-100 pb-3 last:border-0 last:pb-0">
+                        <p class="text-sm font-medium">{{ profile.full_name }}</p>
+                        <p class="text-xs text-slate-500">Registered {{ profile.created_at|timesince }} ago</p>
+                    </div>
+                {% empty %}
+                    <p class="text-sm text-slate-500">No recent activity.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Subscription Plans{% endblock %}
+{% block breadcrumb %}Dashboard / Membership / Subscription Plans{% endblock %}
+{% block page_title %}Subscription Plans{% endblock %}
+
+{% block content %}
+<section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <p class="text-sm font-semibold text-slate-950">Subscription Plans</p>
+            <p class="mt-1 text-xs text-slate-500"><span id="planCount">{{ plans|length }}</span> plans available for user subscriptions.</p>
+        </div>
+        <button id="addPlanButton" type="button" class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700">Add Plan</button>
+    </div>
+
+    <div class="mt-5 overflow-x-auto">
+        <table class="w-full min-w-[1040px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs uppercase text-slate-500">
+                <tr>
+                    <th class="py-3 pr-4">Plan ID</th>
+                    <th class="py-3 pr-4">Plan Name</th>
+                    <th class="py-3 pr-4">Price</th>
+                    <th class="py-3 pr-4">Monthly Reward</th>
+                    <th class="py-3 pr-4">Yearly Reward</th>
+                    <th class="py-3 pr-4">Pool Limit</th>
+                    <th class="py-3 pr-4">Refundable</th>
+                    <th class="py-3 pr-4">Non Refundable</th>
+                    <th class="py-3 pr-4">Created</th>
+                    <th class="py-3 pr-4">Action</th>
+                </tr>
+            </thead>
+            <tbody id="plansTableBody" class="divide-y divide-slate-100">
+                {% for plan in plans %}
+                    <tr id="plan-row-{{ plan.id }}">
+                        <td class="py-3 pr-4 font-medium">{{ plan.id }}</td>
+                        <td class="py-3 pr-4" data-plan-cell="plan_name">{{ plan.plan_name }}</td>
+                        <td class="py-3 pr-4" data-plan-cell="plan_price">Rs. {{ plan.plan_price }}</td>
+                        <td class="py-3 pr-4" data-plan-cell="monthly_reward">Rs. {{ plan.monthly_reward }}</td>
+                        <td class="py-3 pr-4" data-plan-cell="yearly_reward">Rs. {{ plan.yearly_reward }}</td>
+                        <td class="py-3 pr-4" data-plan-cell="global_pool_limit">Rs. {{ plan.global_pool_limit }}</td>
+                        <td class="py-3 pr-4" data-plan-cell="refundable">
+                            <span class="rounded-full px-2 py-1 text-xs font-semibold {% if plan.refundable %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 text-slate-600{% endif %}">{% if plan.refundable %}Yes{% else %}No{% endif %}</span>
+                        </td>
+                        <td class="py-3 pr-4" data-plan-cell="non_refundable">
+                            <span class="rounded-full px-2 py-1 text-xs font-semibold {% if plan.non_refundable %}bg-amber-100 text-amber-700{% else %}bg-slate-100 text-slate-600{% endif %}">{% if plan.non_refundable %}Yes{% else %}No{% endif %}</span>
+                        </td>
+                        <td class="py-3 pr-4" data-plan-cell="created_at">{{ plan.created_at|date:'d M Y' }}</td>
+                        <td class="py-3 pr-4">
+                            <button
+                                type="button"
+                                class="font-medium text-violet-700"
+                                data-edit-plan
+                                data-action="{% url 'admin_subscription_plan_edit' plan.id %}"
+                                data-id="{{ plan.id }}"
+                                data-plan-name="{{ plan.plan_name }}"
+                                data-plan-price="{{ plan.plan_price }}"
+                                data-monthly-reward="{{ plan.monthly_reward }}"
+                                data-yearly-reward="{{ plan.yearly_reward }}"
+                                data-global-pool-limit="{{ plan.global_pool_limit }}"
+                                data-refundable="{% if plan.refundable %}true{% else %}false{% endif %}"
+                                data-non-refundable="{% if plan.non_refundable %}true{% else %}false{% endif %}"
+                            >Edit</button>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr id="emptyPlansRow">
+                        <td colspan="10" class="py-8 text-center text-slate-500">No subscription plans created yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div id="planDrawerBackdrop" class="fixed inset-0 z-40 hidden bg-slate-950/40"></div>
+<aside id="planDrawer" class="fixed inset-y-0 right-0 z-50 hidden w-full max-w-xl overflow-y-auto bg-white shadow-xl">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
+        <div>
+            <p id="drawerTitle" class="text-lg font-semibold text-slate-950">Add Plan</p>
+            <p class="mt-1 text-sm text-slate-500">Save plan rewards and subscription settings.</p>
+        </div>
+        <button id="closePlanDrawer" type="button" class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Close</button>
+    </div>
+
+    <form id="planDrawerForm" method="post" action="{% url 'admin_subscription_plans' %}" data-create-action="{% url 'admin_subscription_plans' %}" class="space-y-5 px-5 py-5">
+        {% csrf_token %}
+        <div id="planFormErrors" class="hidden rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"></div>
+
+        <div>
+            <label for="{{ form.plan_name.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Plan Name</label>
+            {{ form.plan_name }}
+        </div>
+
+        <div>
+            <label for="{{ form.plan_price.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Plan Price</label>
+            {{ form.plan_price }}
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+                <label for="{{ form.monthly_reward.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Monthly Reward</label>
+                {{ form.monthly_reward }}
+            </div>
+            <div>
+                <label for="{{ form.yearly_reward.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Yearly Reward</label>
+                {{ form.yearly_reward }}
+            </div>
+        </div>
+
+        <div>
+            <label for="{{ form.global_pool_limit.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-700">Global Pool Limit</label>
+            {{ form.global_pool_limit }}
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+            <label class="flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700">
+                {{ form.refundable }}
+                Refundable
+            </label>
+            <label class="flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700">
+                {{ form.non_refundable }}
+                Non Refundable
+            </label>
+        </div>
+
+        <button id="planSubmitButton" type="submit" class="w-full rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700">Save Plan</button>
+    </form>
+</aside>
+
+<script>
+    const drawer = document.getElementById('planDrawer');
+    const backdrop = document.getElementById('planDrawerBackdrop');
+    const addButton = document.getElementById('addPlanButton');
+    const closeButton = document.getElementById('closePlanDrawer');
+    const form = document.getElementById('planDrawerForm');
+    const drawerTitle = document.getElementById('drawerTitle');
+    const submitButton = document.getElementById('planSubmitButton');
+    const errorsBox = document.getElementById('planFormErrors');
+    const tableBody = document.getElementById('plansTableBody');
+    const planCount = document.getElementById('planCount');
+
+    const fields = {
+        plan_name: form.querySelector('[name="plan_name"]'),
+        plan_price: form.querySelector('[name="plan_price"]'),
+        monthly_reward: form.querySelector('[name="monthly_reward"]'),
+        yearly_reward: form.querySelector('[name="yearly_reward"]'),
+        global_pool_limit: form.querySelector('[name="global_pool_limit"]'),
+        refundable: form.querySelector('[name="refundable"]'),
+        non_refundable: form.querySelector('[name="non_refundable"]'),
+    };
+
+    function openDrawer() {
+        drawer.classList.remove('hidden');
+        backdrop.classList.remove('hidden');
+        fields.plan_name.focus();
+    }
+
+    function closeDrawer() {
+        drawer.classList.add('hidden');
+        backdrop.classList.add('hidden');
+        errorsBox.classList.add('hidden');
+        errorsBox.textContent = '';
+    }
+
+    function resetFormForCreate() {
+        form.action = form.dataset.createAction;
+        form.dataset.mode = 'create';
+        form.dataset.planId = '';
+        form.reset();
+        drawerTitle.textContent = 'Add Plan';
+        submitButton.textContent = 'Save Plan';
+        openDrawer();
+    }
+
+    function openEditDrawer(button) {
+        form.action = button.dataset.action;
+        form.dataset.mode = 'edit';
+        form.dataset.planId = button.dataset.id;
+        fields.plan_name.value = button.dataset.planName;
+        fields.plan_price.value = button.dataset.planPrice;
+        fields.monthly_reward.value = button.dataset.monthlyReward;
+        fields.yearly_reward.value = button.dataset.yearlyReward;
+        fields.global_pool_limit.value = button.dataset.globalPoolLimit;
+        fields.refundable.checked = button.dataset.refundable === 'true';
+        fields.non_refundable.checked = button.dataset.nonRefundable === 'true';
+        drawerTitle.textContent = `Edit Plan #${button.dataset.id}`;
+        submitButton.textContent = 'Update Plan';
+        openDrawer();
+    }
+
+    function statusBadge(value, enabledClass) {
+        const classes = value ? enabledClass : 'bg-slate-100 text-slate-600';
+        return `<span class="rounded-full px-2 py-1 text-xs font-semibold ${classes}">${value ? 'Yes' : 'No'}</span>`;
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
+    function planRowHtml(plan) {
+        return `
+            <td class="py-3 pr-4 font-medium">${plan.id}</td>
+            <td class="py-3 pr-4" data-plan-cell="plan_name">${escapeHtml(plan.plan_name)}</td>
+            <td class="py-3 pr-4" data-plan-cell="plan_price">Rs. ${escapeHtml(plan.plan_price)}</td>
+            <td class="py-3 pr-4" data-plan-cell="monthly_reward">Rs. ${escapeHtml(plan.monthly_reward)}</td>
+            <td class="py-3 pr-4" data-plan-cell="yearly_reward">Rs. ${escapeHtml(plan.yearly_reward)}</td>
+            <td class="py-3 pr-4" data-plan-cell="global_pool_limit">Rs. ${escapeHtml(plan.global_pool_limit)}</td>
+            <td class="py-3 pr-4" data-plan-cell="refundable">${statusBadge(plan.refundable, 'bg-emerald-100 text-emerald-700')}</td>
+            <td class="py-3 pr-4" data-plan-cell="non_refundable">${statusBadge(plan.non_refundable, 'bg-amber-100 text-amber-700')}</td>
+            <td class="py-3 pr-4" data-plan-cell="created_at">${escapeHtml(plan.created_at)}</td>
+            <td class="py-3 pr-4">
+                <button type="button" class="font-medium text-violet-700" data-edit-plan data-action="${escapeHtml(plan.edit_url)}" data-id="${plan.id}" data-plan-name="${escapeHtml(plan.plan_name)}" data-plan-price="${escapeHtml(plan.plan_price)}" data-monthly-reward="${escapeHtml(plan.monthly_reward)}" data-yearly-reward="${escapeHtml(plan.yearly_reward)}" data-global-pool-limit="${escapeHtml(plan.global_pool_limit)}" data-refundable="${plan.refundable}" data-non-refundable="${plan.non_refundable}">Edit</button>
+            </td>
+        `;
+    }
+
+    function upsertPlanRow(plan) {
+        document.getElementById('emptyPlansRow')?.remove();
+        let row = document.getElementById(`plan-row-${plan.id}`);
+        if (!row) {
+            row = document.createElement('tr');
+            row.id = `plan-row-${plan.id}`;
+            tableBody.prepend(row);
+            planCount.textContent = String(Number(planCount.textContent || '0') + 1);
+        }
+        row.innerHTML = planRowHtml(plan);
+    }
+
+    function showErrors(errors) {
+        const messages = [];
+        Object.entries(errors).forEach(([field, fieldErrors]) => {
+            messages.push(`${field}: ${fieldErrors.join(', ')}`);
+        });
+        errorsBox.textContent = messages.join(' ');
+        errorsBox.classList.remove('hidden');
+    }
+
+    addButton.addEventListener('click', resetFormForCreate);
+    closeButton.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    tableBody.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-edit-plan]');
+        if (button) {
+            openEditDrawer(button);
+        }
+    });
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        errorsBox.classList.add('hidden');
+        submitButton.disabled = true;
+        submitButton.textContent = form.dataset.mode === 'edit' ? 'Updating...' : 'Saving...';
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                showErrors(data.errors || { error: ['Unable to save plan.'] });
+                return;
+            }
+
+            upsertPlanRow(data.plan);
+            closeDrawer();
+        } catch (error) {
+            showErrors({ error: ['Unable to save plan. Please try again.'] });
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = form.dataset.mode === 'edit' ? 'Update Plan' : 'Save Plan';
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Registered Users{% endblock %}
+{% block breadcrumb %}Dashboard / Registered Users{% endblock %}
+{% block page_title %}Registered Users{% endblock %}
+
+{% block content %}
+<section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <p class="text-sm font-semibold text-slate-950">Registered Users</p>
+            <p class="text-xs text-slate-500">{{ total_users }} total users</p>
+        </div>
+        <button class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white">Export</button>
+    </div>
+    <div class="mt-5 grid gap-3 md:grid-cols-[1fr_160px_160px_120px]">
+        <input type="search" placeholder="Search by name, phone, email, user ID" class="rounded-lg border border-slate-200 px-4 py-2 text-sm outline-none focus:border-violet-500">
+        <select class="rounded-lg border border-slate-200 px-3 py-2 text-sm"><option>All Status</option></select>
+        <select class="rounded-lg border border-slate-200 px-3 py-2 text-sm"><option>All Cities</option></select>
+        <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium">Filters</button>
+    </div>
+    <div class="mt-5 overflow-x-auto">
+        <table class="w-full min-w-[900px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs uppercase text-slate-500">
+                <tr>
+                    <th class="py-3 pr-4">User ID</th>
+                    <th class="py-3 pr-4">Name</th>
+                    <th class="py-3 pr-4">Phone</th>
+                    <th class="py-3 pr-4">Email</th>
+                    <th class="py-3 pr-4">City</th>
+                    <th class="py-3 pr-4">Registered On</th>
+                    <th class="py-3 pr-4">Subscription Status</th>
+                    <th class="py-3 pr-4">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for profile in profiles %}
+                    <tr>
+                        <td class="py-3 pr-4 font-medium">{{ profile.id }}</td>
+                        <td class="py-3 pr-4">{{ profile.full_name }}</td>
+                        <td class="py-3 pr-4">{{ profile.phone_number|default:'-' }}</td>
+                        <td class="py-3 pr-4">{{ profile.email_address|default:profile.user.email|default:'-' }}</td>
+                        <td class="py-3 pr-4">{{ profile.city|default:'-' }}</td>
+                        <td class="py-3 pr-4">{{ profile.created_at|date:'d M Y' }}</td>
+                        <td class="py-3 pr-4">
+                            <span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold capitalize text-amber-700">{{ profile.subscription_status.status_name|default:'pending' }}</span>
+                        </td>
+                        <td class="py-3 pr-4"><a href="{% url 'admin_user_details' profile.id %}" class="font-medium text-violet-700">View</a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="8" class="py-8 text-center text-slate-500">No registered users found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SFC Admin{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-900 lg:overflow-hidden">
+    <div class="min-h-screen lg:flex lg:h-screen">
+        <aside id="adminSidebar" class="flex flex-col bg-[#061b3a] text-white transition-all duration-200 lg:h-screen lg:w-72 lg:shrink-0 lg:overflow-hidden">
+            <div class="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-5">
+                <div class="min-w-0">
+                    <p class="whitespace-nowrap text-lg font-bold leading-tight" data-sidebar-label>SuperFlow Food Club</p>
+                    <p class="mt-1 text-xs text-blue-200" data-sidebar-label>Admin Console</p>
+                </div>
+                <button id="sidebarToggle" type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 hover:bg-white/10" aria-label="Toggle sidebar">
+                    <span class="grid gap-1">
+                        <span class="block h-0.5 w-4 bg-white"></span>
+                        <span class="block h-0.5 w-4 bg-white"></span>
+                        <span class="block h-0.5 w-4 bg-white"></span>
+                    </span>
+                </button>
+            </div>
+            <div class="flex flex-1 flex-col justify-between">
+                <nav class="grid gap-1 px-3 py-4 text-sm">
+                    <a href="{% url 'admin_dashboard_home' %}" title="Dashboard" class="rounded-lg px-3 py-2.5 {% if active_page == 'dashboard' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Dashboard</span></a>
+                    <a href="{% url 'admin_registered_users' %}" title="Registered Users" class="rounded-lg px-3 py-2.5 {% if active_page == 'registered_users' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Registered Users</span></a>
+                    <a href="{% url 'admin_membership_requests' %}" title="Membership Requests" class="rounded-lg px-3 py-2.5 {% if active_page == 'membership_requests' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Membership Requests</span></a>
+                    <a href="{% url 'admin_subscription_plans' %}" title="Subscription Plans" class="rounded-lg px-3 py-2.5 {% if active_page == 'subscription_plans' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Subscription Plans</span></a>
+                    <a href="{% url 'admin_payments_dashboard' %}" title="Payments" class="rounded-lg px-3 py-2.5 {% if active_page == 'payments' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Payments</span></a>
+                    <a href="{% url 'admin_loyalty_rewards_dashboard' %}" title="Rewards" class="rounded-lg px-3 py-2.5 {% if active_page == 'loyalty_rewards' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Rewards</span></a>
+                    <a href="{% url 'admin_send_notification' %}" title="Send Notification" class="rounded-lg px-3 py-2.5 {% if active_page == 'send_notification' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Send Notification</span></a>
+                    <a href="{% url 'admin_notification_rules' %}" title="Auto Notification Rules" class="rounded-lg px-3 py-2.5 {% if active_page == 'notification_rules' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Auto Notification Rules</span></a>
+                </nav>
+                <div class="px-3 pb-4">
+                    <a href="{% url 'admin_dashboard_logout' %}" title="Logout" class="block rounded-lg border border-white/10 px-3 py-2.5 text-sm text-blue-100 hover:bg-white/10"><span data-sidebar-label>Logout</span></a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 lg:h-screen lg:overflow-y-auto">
+            <header class="border-b border-slate-200 bg-white px-5 py-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-xl font-semibold text-slate-950">{% block page_title %}Dashboard{% endblock %}</h1>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="hidden rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-500 md:block">01 May 2026 - 31 May 2026</div>
+                        <div class="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">{{ club_admin.name|default:'Admin' }}</div>
+                    </div>
+                </div>
+            </header>
+            <section class="px-5 py-5">
+                {% if messages %}
+                    <div class="mb-4 space-y-2">
+                        {% for message in messages %}
+                            <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% block content %}{% endblock %}
+            </section>
+        </main>
+    </div>
+    <script>
+        const sidebar = document.getElementById('adminSidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarLabels = document.querySelectorAll('[data-sidebar-label]');
+
+        sidebarToggle.addEventListener('click', () => {
+            const isCollapsed = sidebar.classList.toggle('lg:w-20');
+            sidebar.classList.toggle('lg:w-72', !isCollapsed);
+            sidebarLabels.forEach((label) => {
+                label.classList.toggle('lg:hidden', isCollapsed);
+            });
+        });
+    </script>
+</body>
+</html>

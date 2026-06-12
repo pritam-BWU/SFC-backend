@@ -1,0 +1,75 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Membership Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard / Membership Dashboard{% endblock %}
+{% block page_title %}Membership Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div>
+        <p class="text-sm font-semibold text-slate-950">Membership Management</p>
+        <p class="text-xs text-slate-500">Review members and manage the subscription plans available to users.</p>
+    </div>
+    <a href="{% url 'admin_subscription_plans' %}" class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700">Create Subscription Plan</a>
+</div>
+
+<div class="grid gap-4 md:grid-cols-5">
+    <article class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Total Members</p><p class="mt-2 text-2xl font-semibold">{{ active_users }}</p></article>
+    <article class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Flexible Members</p><p class="mt-2 text-2xl font-semibold">{{ flexible_members }}</p></article>
+    <article class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Long-Duration Members</p><p class="mt-2 text-2xl font-semibold">{{ long_duration_members }}</p></article>
+    <article class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Pending Approvals</p><p class="mt-2 text-2xl font-semibold">{{ pending_approvals }}</p></article>
+    <article class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200"><p class="text-xs text-slate-500">Pending Payments</p><p class="mt-2 text-2xl font-semibold">{{ pending_payments }}</p></article>
+</div>
+
+<section class="mt-4 grid gap-4 xl:grid-cols-2">
+    <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold">Flexible Membership Access</p>
+        <div class="mt-5 grid gap-4 sm:grid-cols-[150px_1fr]">
+            <div class="flex h-36 w-36 items-center justify-center rounded-full" style="background: conic-gradient(#f97316 0 30%, #facc15 30% 58%, #3b82f6 58% 80%, #8b5cf6 80% 100%);">
+                <div class="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white"><span class="text-2xl font-semibold">{{ flexible_members }}</span><span class="text-xs text-slate-500">Total</span></div>
+            </div>
+            <dl class="space-y-3 text-sm">
+                <div class="flex justify-between"><dt>Bronze</dt><dd>29.63%</dd></div>
+                <div class="flex justify-between"><dt>Silver</dt><dd>22.23%</dd></div>
+                <div class="flex justify-between"><dt>Gold</dt><dd>25.93%</dd></div>
+                <div class="flex justify-between"><dt>Platinum</dt><dd>14.81%</dd></div>
+                <div class="flex justify-between"><dt>Diamond</dt><dd>7.41%</dd></div>
+            </dl>
+        </div>
+    </article>
+    <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold">Long-Duration Membership Access</p>
+        <div class="mt-5 grid gap-4 sm:grid-cols-[150px_1fr]">
+            <div class="flex h-36 w-36 items-center justify-center rounded-full" style="background: conic-gradient(#f97316 0 22%, #facc15 22% 52%, #3b82f6 52% 78%, #8b5cf6 78% 100%);">
+                <div class="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white"><span class="text-2xl font-semibold">{{ long_duration_members }}</span><span class="text-xs text-slate-500">Total</span></div>
+            </div>
+            <dl class="space-y-3 text-sm">
+                <div class="flex justify-between"><dt>Bronze</dt><dd>22.34%</dd></div>
+                <div class="flex justify-between"><dt>Silver</dt><dd>18.59%</dd></div>
+                <div class="flex justify-between"><dt>Gold</dt><dd>25.53%</dd></div>
+                <div class="flex justify-between"><dt>Platinum</dt><dd>21.30%</dd></div>
+                <div class="flex justify-between"><dt>Diamond</dt><dd>12.23%</dd></div>
+            </dl>
+        </div>
+    </article>
+</section>
+
+<section class="mt-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold">Recent Membership Activity</p>
+        <a href="{% url 'admin_membership_requests' %}" class="text-sm font-medium text-violet-700">View All</a>
+    </div>
+    <div class="mt-4 overflow-x-auto">
+        <table class="w-full min-w-[760px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs uppercase text-slate-500"><tr><th class="py-3 pr-4">Member ID</th><th class="py-3 pr-4">Name</th><th class="py-3 pr-4">Plan</th><th class="py-3 pr-4">Category</th><th class="py-3 pr-4">Applied On</th><th class="py-3 pr-4">Status</th><th class="py-3 pr-4">Action</th></tr></thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for profile in profiles %}
+                    <tr><td class="py-3 pr-4 font-medium">{{ profile.id }}</td><td class="py-3 pr-4">{{ profile.full_name }}</td><td class="py-3 pr-4">{{ profile.subscription_plan.plan_name|default:'-' }}</td><td class="py-3 pr-4">{% if profile.subscription_plan.refundable %}Flexible{% else %}Long-Duration{% endif %}</td><td class="py-3 pr-4">{{ profile.created_at|date:'d M Y' }}</td><td class="py-3 pr-4"><span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold capitalize text-amber-700">{{ profile.subscription_status.status_name|default:'pending' }}</span></td><td class="py-3 pr-4"><a href="{% url 'admin_membership_request_details' profile.id %}" class="text-violet-700">Review</a></td></tr>
+                {% empty %}
+                    <tr><td colspan="7" class="py-8 text-center text-slate-500">No membership activity yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

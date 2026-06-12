@@ -1,0 +1,97 @@
+{% extends 'user_dashboard/base.html' %}
+
+{% block title %}SFC Profile{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+<div class="grid gap-5 xl:grid-cols-[1fr_360px]">
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-5">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Member Details</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ profile.full_name }}</h2>
+                <p class="mt-1 text-sm text-slate-500">{{ request.user.username }}</p>
+            </div>
+            <span class="rounded-full px-3 py-1 text-xs font-semibold {% if profile.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
+                {% if profile.is_active %}Active{% else %}Inactive{% endif %}
+            </span>
+        </div>
+
+        <dl class="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2">
+            <div>
+                <dt class="text-sm text-slate-500">Date of Birth</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.dob|date:'d M Y'|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">PAN Number</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.pan_no|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Gender</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.get_gender_display|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Nationality</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.nationality|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Phone Number</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.phone_number|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Email Address</dt>
+                <dd class="mt-1 break-words font-semibold text-slate-950">{{ profile.email_address|default:'-' }}</dd>
+            </div>
+            <div class="sm:col-span-2">
+                <dt class="text-sm text-slate-500">Address</dt>
+                <dd class="mt-1 whitespace-pre-line font-semibold text-slate-950">{{ profile.address|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">City</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.city|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">State</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.state|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Postal Code</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.postal_code|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">IP Address</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.ip_address|default:'-' }}</dd>
+            </div>
+        </dl>
+    </article>
+
+    <div class="space-y-5">
+        <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Nominee</p>
+            <dl class="mt-4 space-y-4">
+                <div>
+                    <dt class="text-sm text-slate-500">Full Name</dt>
+                    <dd class="font-semibold text-slate-950">{{ profile.nominee_full_name|default:'-' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-slate-500">Relationship</dt>
+                    <dd class="font-semibold text-slate-950">{{ profile.nominee_relationship|default:'-' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-slate-500">Phone Number</dt>
+                    <dd class="font-semibold text-slate-950">{{ profile.nominee_phone_number|default:'-' }}</dd>
+                </div>
+            </dl>
+        </article>
+
+        <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Document</p>
+            {% if profile.uploaded_form_document %}
+                <img src="{{ profile.uploaded_form_document.url }}" alt="Uploaded membership document" class="mt-4 h-64 w-full rounded-lg object-cover ring-1 ring-slate-200">
+            {% else %}
+                <div class="mt-4 flex h-64 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500">No document uploaded</div>
+            {% endif %}
+        </article>
+    </div>
+</div>
+{% endblock %}

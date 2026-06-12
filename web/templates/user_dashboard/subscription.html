@@ -1,0 +1,85 @@
+{% extends 'user_dashboard/base.html' %}
+
+{% block title %}SFC Subscription{% endblock %}
+{% block page_title %}Subscription{% endblock %}
+
+{% block content %}
+<div class="grid gap-5 lg:grid-cols-3">
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-2">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Current Plan</p>
+                <h2 class="mt-2 text-3xl font-semibold text-slate-950">{{ subscription_plan.plan_name|default:'No plan assigned' }}</h2>
+            </div>
+            <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold capitalize text-amber-700">
+                {{ profile.subscription_status.status_name|default:'pending' }}
+            </span>
+        </div>
+        <dl class="mt-8 grid gap-x-6 gap-y-5 border-t border-slate-200 pt-6 sm:grid-cols-2">
+            <div>
+                <dt class="text-sm text-slate-500">Plan Price</dt>
+                <dd class="mt-2 text-2xl font-semibold text-slate-950">{% if subscription_plan %}Rs. {{ subscription_plan.plan_price }}{% else %}-{% endif %}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Refundable</dt>
+                <dd class="mt-2 text-2xl font-semibold text-slate-950">{% if subscription_plan %}{% if subscription_plan.refundable %}Yes{% else %}No{% endif %}{% else %}-{% endif %}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Non Refundable</dt>
+                <dd class="mt-2 text-2xl font-semibold text-slate-950">{% if subscription_plan %}{% if subscription_plan.non_refundable %}Yes{% else %}No{% endif %}{% else %}-{% endif %}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Last Updated</dt>
+                <dd class="mt-2 text-2xl font-semibold text-slate-950">{{ profile.updated_at|date:'d M Y' }}</dd>
+            </div>
+        </dl>
+    </article>
+
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Membership</p>
+        <dl class="mt-5 space-y-4">
+            <div>
+                <dt class="text-sm text-slate-500">Membership ID</dt>
+                <dd class="mt-1 break-words font-semibold text-slate-950">{{ profile.id }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Created Date</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.created_at|date:'d M Y' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Source</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.how_did_you_hear_about_club|default:'-' }}</dd>
+            </div>
+        </dl>
+    </article>
+</div>
+
+<div class="mt-5 grid gap-5 lg:grid-cols-2">
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Payment Details</p>
+        <p class="mt-4 whitespace-pre-line text-sm leading-6 text-slate-700">{{ profile.payment_details|default:'No payment details available.' }}</p>
+    </article>
+
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Subscriber</p>
+        <dl class="mt-5 grid gap-4 sm:grid-cols-2">
+            <div>
+                <dt class="text-sm text-slate-500">Full Name</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.full_name }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Username</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ request.user.username }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Phone Number</dt>
+                <dd class="mt-1 font-semibold text-slate-950">{{ profile.phone_number|default:'-' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Email Address</dt>
+                <dd class="mt-1 break-words font-semibold text-slate-950">{{ profile.email_address|default:'-' }}</dd>
+            </div>
+        </dl>
+    </article>
+</div>
+{% endblock %}

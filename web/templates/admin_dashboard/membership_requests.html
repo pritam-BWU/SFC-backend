@@ -1,0 +1,68 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Membership Approval Queue{% endblock %}
+{% block breadcrumb %}Dashboard / Membership / Approval Queue{% endblock %}
+{% block page_title %}Membership Approval Queue{% endblock %}
+
+{% block content %}
+
+<section class="mt-5 rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <p class="text-sm font-semibold text-slate-950">Pending Subscription Approvals</p>
+            <p class="text-xs text-slate-500">Users waiting for physical form review and profile completion.</p>
+        </div>
+        <a href="{% url 'admin_subscription_plans' %}" class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Manage Plans</a>
+    </div>
+
+    <div class="mt-5 overflow-x-auto">
+        <table class="w-full min-w-[980px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs uppercase text-slate-500">
+                <tr>
+                    <th class="py-3 pr-4">Member ID</th>
+                    <th class="py-3 pr-4">Name</th>
+                    <th class="py-3 pr-4">Contact</th>
+                    <th class="py-3 pr-4">Selected Plan</th>
+                    <th class="py-3 pr-4">Payment</th>
+                    <th class="py-3 pr-4">Form Copy</th>
+                    <th class="py-3 pr-4">Status</th>
+                    <th class="py-3 pr-4">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for profile in profiles %}
+                    <tr>
+                        <td class="py-3 pr-4 font-medium">{{ profile.id }}</td>
+                        <td class="py-3 pr-4">{{ profile.full_name }}</td>
+                        <td class="py-3 pr-4">
+                            <span class="block">{{ profile.phone_number|default:'-' }}</span>
+                            <span class="text-xs text-slate-500">{{ profile.email_address|default:profile.user.email|default:'-' }}</span>
+                        </td>
+                        <td class="py-3 pr-4">{{ profile.subscription_plan.plan_name|default:'Not selected' }}</td>
+                        <td class="py-3 pr-4">
+                            {% if profile.payment_details %}
+                                <span class="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700">Recorded</span>
+                            {% else %}
+                                <span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700">Needs entry</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 pr-4">
+                            {% if profile.uploaded_form_document %}
+                                <span class="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700">Attached</span>
+                            {% else %}
+                                <span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600">Missing</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 pr-4"><span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold capitalize text-amber-700">{{ profile.subscription_status.status_name|default:'pending' }}</span></td>
+                        <td class="py-3 pr-4"><a href="{% url 'admin_membership_request_details' profile.id %}" class="font-medium text-violet-700">Review</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="py-8 text-center text-slate-500">No pending subscriptions waiting for approval.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

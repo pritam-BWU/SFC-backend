@@ -1,0 +1,118 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block title %}Review Membership{% endblock %}
+{% block breadcrumb %}Dashboard / Membership / Review Membership{% endblock %}
+{% block page_title %}Review Membership{% endblock %}
+
+{% block content %}
+<div class="mb-5 grid gap-4 lg:grid-cols-[1fr_420px]">
+    <section class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-violet-700">Member ID {{ profile.id }}</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ profile.full_name }}</h2>
+                <p class="mt-1 text-sm text-slate-500">{{ profile.user.username }} / {{ profile.email_address|default:profile.user.email|default:'No email' }}</p>
+            </div>
+            <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold capitalize text-amber-700">{{ profile.subscription_status.status_name|default:'pending' }}</span>
+        </div>
+
+        <dl class="mt-6 grid gap-x-8 gap-y-5 md:grid-cols-3">
+            <div><dt class="text-sm text-slate-500">Selected Plan</dt><dd class="mt-1 font-medium">{{ profile.subscription_plan.plan_name|default:'Not selected' }}</dd></div>
+            <div><dt class="text-sm text-slate-500">Plan Price</dt><dd class="mt-1 font-medium">{% if profile.subscription_plan %}Rs. {{ profile.subscription_plan.plan_price }}{% else %}-{% endif %}</dd></div>
+            <div><dt class="text-sm text-slate-500">Signup Date</dt><dd class="mt-1 font-medium">{{ profile.created_at|date:'d M Y h:i A' }}</dd></div>
+            <div><dt class="text-sm text-slate-500">Phone</dt><dd class="mt-1 font-medium">{{ profile.phone_number|default:'-' }}</dd></div>
+            <div><dt class="text-sm text-slate-500">Payment Details</dt><dd class="mt-1 font-medium">{{ profile.payment_details|default:'Not entered yet' }}</dd></div>
+            <div><dt class="text-sm text-slate-500">Physical Form Copy</dt><dd class="mt-1 font-medium">{% if profile.uploaded_form_document %}Attached{% else %}Missing{% endif %}</dd></div>
+        </dl>
+    </section>
+
+    <aside class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold text-slate-950">Office Decision</p>
+        <p class="mt-1 text-xs leading-5 text-slate-500">Use these after checking the physical form and payment proof.</p>
+        <div class="mt-5 grid gap-3">
+            <form method="post">
+                {% csrf_token %}
+                <button name="action" value="approve" class="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700">Approve Subscription</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <button name="action" value="reject" class="w-full rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white hover:bg-red-700">Reject Subscription</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <button name="action" value="reject_refund" class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 hover:bg-red-100">Reject And Request Refund</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <button name="action" value="transfer" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Mark Transferred</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <button name="action" value="close" class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Close Request</button>
+            </form>
+        </div>
+    </aside>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="save_profile">
+    <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+            <p class="text-sm font-semibold text-slate-950">Complete Profile From Physical Form</p>
+            <p class="mt-1 text-xs text-slate-500">Fill the remaining details after approval and attach the photocopy of the submitted form.</p>
+        </div>
+        <button type="submit" class="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700">Save Profile Details</button>
+    </div>
+
+    {% if form.errors %}
+        <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            Please fix the highlighted fields before saving.
+        </div>
+    {% endif %}
+
+    <div class="mt-5 grid gap-5 lg:grid-cols-3">
+        <section class="space-y-4">
+            <h3 class="text-sm font-semibold text-slate-950">Personal Information</h3>
+            <div><label class="mb-2 block text-sm text-slate-600">Full Name</label>{{ form.full_name }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Date of Birth</label>{{ form.dob }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">PAN No.</label>{{ form.pan_no }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Gender</label>{{ form.gender }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Nationality</label>{{ form.nationality }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Phone Number</label>{{ form.phone_number }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Email Address</label>{{ form.email_address }}</div>
+        </section>
+
+        <section class="space-y-4">
+            <h3 class="text-sm font-semibold text-slate-950">Address And Nominee</h3>
+            <div><label class="mb-2 block text-sm text-slate-600">Address</label>{{ form.address }}</div>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div><label class="mb-2 block text-sm text-slate-600">City</label>{{ form.city }}</div>
+                <div><label class="mb-2 block text-sm text-slate-600">State</label>{{ form.state }}</div>
+            </div>
+            <div><label class="mb-2 block text-sm text-slate-600">Postal Code</label>{{ form.postal_code }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Nominee Full Name</label>{{ form.nominee_full_name }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Nominee Relationship</label>{{ form.nominee_relationship }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Nominee Phone Number</label>{{ form.nominee_phone_number }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">How Did User Hear About Club?</label>{{ form.how_did_you_hear_about_club }}</div>
+        </section>
+
+        <section class="space-y-4">
+            <h3 class="text-sm font-semibold text-slate-950">Subscription And Form Copy</h3>
+            <div><label class="mb-2 block text-sm text-slate-600">Subscription Plan</label>{{ form.subscription_plan }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Subscription Status</label>{{ form.subscription_status }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Payment Details</label>{{ form.payment_details }}</div>
+            <div><label class="mb-2 block text-sm text-slate-600">Physical Form Photocopy</label>{{ form.uploaded_form_document }}</div>
+            {% if profile.uploaded_form_document %}
+                <img src="{{ profile.uploaded_form_document.url }}" alt="Uploaded physical form" class="h-56 w-full rounded-lg object-cover ring-1 ring-slate-200">
+            {% else %}
+                <div class="flex h-56 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500">No form photocopy attached</div>
+            {% endif %}
+            <label class="flex items-center gap-3 rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700">
+                {{ form.is_active }}
+                Active User Profile
+            </label>
+        </section>
+    </div>
+</form>
+{% endblock %}
