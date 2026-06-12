@@ -162,6 +162,56 @@ class GlobalPoolSettingForm(forms.ModelForm):
         }
 
 
+class UserDashboardProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = (
+            'full_name',
+            'dob',
+            'pan_no',
+            'gender',
+            'nationality',
+            'address',
+            'city',
+            'state',
+            'postal_code',
+            'phone_number',
+            'email_address',
+            'how_did_you_hear_about_club',
+        )
+        widgets = {
+            'dob': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100',
+                },
+                format='%Y-%m-%d',
+            ),
+            'address': forms.Textarea(
+                attrs={
+                    'rows': 3,
+                    'class': 'w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100',
+                }
+            ),
+            'how_did_you_hear_about_club': forms.TextInput(
+                attrs={
+                    'class': 'w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100',
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        input_class = 'w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100'
+        for field_name, field in self.fields.items():
+            if field_name == 'dob':
+                continue
+            if isinstance(field.widget, forms.Textarea):
+                field.widget.attrs.setdefault('class', input_class)
+            else:
+                field.widget.attrs.update({'class': input_class})
+
+
 class AdminProfileCompletionForm(forms.ModelForm):
     class Meta:
         model = UserProfile

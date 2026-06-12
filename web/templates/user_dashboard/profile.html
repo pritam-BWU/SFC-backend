@@ -4,70 +4,131 @@
 {% block page_title %}Profile{% endblock %}
 
 {% block content %}
-<div class="grid gap-5 xl:grid-cols-[1fr_360px]">
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+<div class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+    <form method="post" class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        {% csrf_token %}
         <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-5">
             <div>
-                <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Member Details</p>
+                <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Editable Profile</p>
                 <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ profile.full_name }}</h2>
-                <p class="mt-1 text-sm text-slate-500">{{ request.user.username }}</p>
+                <p class="mt-1 text-sm text-slate-500">Member ID {{ profile.id }}</p>
             </div>
-            <span class="rounded-full px-3 py-1 text-xs font-semibold {% if profile.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
-                {% if profile.is_active %}Active{% else %}Inactive{% endif %}
-            </span>
+            <button type="submit" class="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-700">Save Changes</button>
         </div>
 
-        <dl class="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2">
-            <div>
-                <dt class="text-sm text-slate-500">Date of Birth</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.dob|date:'d M Y'|default:'-' }}</dd>
+        {% if form.errors %}
+            <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                Please check the highlighted fields and try again.
             </div>
-            <div>
-                <dt class="text-sm text-slate-500">PAN Number</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.pan_no|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Gender</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.get_gender_display|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Nationality</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.nationality|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Phone Number</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.phone_number|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Email Address</dt>
-                <dd class="mt-1 break-words font-semibold text-slate-950">{{ profile.email_address|default:'-' }}</dd>
-            </div>
-            <div class="sm:col-span-2">
-                <dt class="text-sm text-slate-500">Address</dt>
-                <dd class="mt-1 whitespace-pre-line font-semibold text-slate-950">{{ profile.address|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">City</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.city|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">State</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.state|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Postal Code</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.postal_code|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">IP Address</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.ip_address|default:'-' }}</dd>
-            </div>
-        </dl>
-    </article>
+        {% endif %}
+
+        <div class="mt-6 grid gap-5 lg:grid-cols-2">
+            <section class="space-y-4">
+                <h3 class="text-sm font-semibold text-slate-950">Personal Details</h3>
+                <div>
+                    <label for="{{ form.full_name.id_for_label }}" class="mb-2 block text-sm text-slate-600">Full Name</label>
+                    {{ form.full_name }}
+                    {{ form.full_name.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.dob.id_for_label }}" class="mb-2 block text-sm text-slate-600">Date of Birth</label>
+                    {{ form.dob }}
+                    {{ form.dob.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.pan_no.id_for_label }}" class="mb-2 block text-sm text-slate-600">PAN Number</label>
+                    {{ form.pan_no }}
+                    {{ form.pan_no.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.gender.id_for_label }}" class="mb-2 block text-sm text-slate-600">Gender</label>
+                    {{ form.gender }}
+                    {{ form.gender.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.nationality.id_for_label }}" class="mb-2 block text-sm text-slate-600">Nationality</label>
+                    {{ form.nationality }}
+                    {{ form.nationality.errors }}
+                </div>
+            </section>
+
+            <section class="space-y-4">
+                <h3 class="text-sm font-semibold text-slate-950">Contact And Address</h3>
+                <div>
+                    <label for="{{ form.phone_number.id_for_label }}" class="mb-2 block text-sm text-slate-600">Phone Number</label>
+                    {{ form.phone_number }}
+                    {{ form.phone_number.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.email_address.id_for_label }}" class="mb-2 block text-sm text-slate-600">Email Address</label>
+                    {{ form.email_address }}
+                    {{ form.email_address.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.address.id_for_label }}" class="mb-2 block text-sm text-slate-600">Address</label>
+                    {{ form.address }}
+                    {{ form.address.errors }}
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="{{ form.city.id_for_label }}" class="mb-2 block text-sm text-slate-600">City</label>
+                        {{ form.city }}
+                        {{ form.city.errors }}
+                    </div>
+                    <div>
+                        <label for="{{ form.state.id_for_label }}" class="mb-2 block text-sm text-slate-600">State</label>
+                        {{ form.state }}
+                        {{ form.state.errors }}
+                    </div>
+                </div>
+                <div>
+                    <label for="{{ form.postal_code.id_for_label }}" class="mb-2 block text-sm text-slate-600">Postal Code</label>
+                    {{ form.postal_code }}
+                    {{ form.postal_code.errors }}
+                </div>
+                <div>
+                    <label for="{{ form.how_did_you_hear_about_club.id_for_label }}" class="mb-2 block text-sm text-slate-600">How Did You Hear About Club?</label>
+                    {{ form.how_did_you_hear_about_club }}
+                    {{ form.how_did_you_hear_about_club.errors }}
+                </div>
+            </section>
+        </div>
+    </form>
 
     <div class="space-y-5">
         <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Nominee</p>
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Account Status</p>
+                    <h3 class="mt-2 text-xl font-semibold text-slate-950">{% if profile.is_active %}Active{% else %}Inactive{% endif %}</h3>
+                </div>
+                <span class="rounded-full px-3 py-1 text-xs font-semibold {% if profile.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
+                    Member
+                </span>
+            </div>
+            <dl class="mt-5 space-y-3">
+                <div>
+                    <dt class="text-sm text-slate-500">Username</dt>
+                    <dd class="break-words font-semibold text-slate-950">{{ request.user.username }}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-slate-500">Referral Code</dt>
+                    <dd class="break-words font-semibold text-slate-950">{{ profile.referral_code|default:'-' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-slate-500">Created Date</dt>
+                    <dd class="font-semibold text-slate-950">{{ profile.created_at|date:'d M Y h:i A' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-sm text-slate-500">IP Address</dt>
+                    <dd class="font-semibold text-slate-950">{{ profile.ip_address|default:'-' }}</dd>
+                </div>
+            </dl>
+        </article>
+
+        <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Nominee Details</p>
+            <p class="mt-1 text-xs text-slate-500">Managed by admin only.</p>
             <dl class="mt-4 space-y-4">
                 <div>
                     <dt class="text-sm text-slate-500">Full Name</dt>
@@ -83,15 +144,90 @@
                 </div>
             </dl>
         </article>
-
-        <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Document</p>
-            {% if profile.uploaded_form_document %}
-                <img src="{{ profile.uploaded_form_document.url }}" alt="Uploaded membership document" class="mt-4 h-64 w-full rounded-lg object-cover ring-1 ring-slate-200">
-            {% else %}
-                <div class="mt-4 flex h-64 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500">No document uploaded</div>
-            {% endif %}
-        </article>
     </div>
+</div>
+
+<div class="mt-5 grid gap-5 xl:grid-cols-3">
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Membership</p>
+        <dl class="mt-5 space-y-4">
+            <div>
+                <dt class="text-sm text-slate-500">Plan</dt>
+                <dd class="font-semibold text-slate-950">{{ profile.subscription_plan.plan_name|default:'No plan assigned' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Plan Price</dt>
+                <dd class="font-semibold text-slate-950">{% if profile.subscription_plan %}Rs. {{ profile.subscription_plan.plan_price }}{% else %}-{% endif %}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Subscription Status</dt>
+                <dd class="font-semibold capitalize text-slate-950">{{ profile.subscription_status.status_name|default:'pending' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Loyalty Preference</dt>
+                <dd class="font-semibold text-slate-950">{{ profile.get_loyalty_reward_preference_display|default:'Not selected' }}</dd>
+            </div>
+        </dl>
+    </article>
+
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Rewards</p>
+        <dl class="mt-5 space-y-4">
+            <div>
+                <dt class="text-sm text-slate-500">Total Rewards</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ reward_points.total_rewards|default:'0.00' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Loyalty Rewards</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ reward_points.loyalty_reward|default:'0.00' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Referral Rewards</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ reward_points.referral_rewards|default:'0.00' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Global Pool Rewards</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ reward_points.global_pool_rewards|default:'0.00' }}</dd>
+            </div>
+        </dl>
+    </article>
+
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Global Pool</p>
+        <dl class="mt-5 space-y-4">
+            <div>
+                <dt class="text-sm text-slate-500">Status</dt>
+                <dd class="font-semibold capitalize text-slate-950">{{ global_pool_member.status|default:'Not qualified' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Limit</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ global_pool_member.max_pool_limit|default:'0.00' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Earned</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ global_pool_member.total_pool_earned|default:'0.00' }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-slate-500">Remaining</dt>
+                <dd class="font-semibold text-slate-950">Rs. {{ global_pool_member.remaining_pool_capacity|default:'0.00' }}</dd>
+            </div>
+        </dl>
+    </article>
+</div>
+
+<div class="mt-5 grid gap-5 xl:grid-cols-2">
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Payment Details</p>
+        <p class="mt-4 whitespace-pre-line text-sm leading-6 text-slate-700">{{ profile.payment_details|default:'No payment details available.' }}</p>
+    </article>
+
+    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Document</p>
+        {% if profile.uploaded_form_document %}
+            <img src="{{ profile.uploaded_form_document.url }}" alt="Uploaded membership document" class="mt-4 h-64 w-full rounded-lg object-cover ring-1 ring-slate-200">
+        {% else %}
+            <div class="mt-4 flex h-64 w-full items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500">No document uploaded</div>
+        {% endif %}
+    </article>
 </div>
 {% endblock %}

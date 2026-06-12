@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +6,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SFC Admin{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --sfc-red: #b91c1c;
+            --sfc-red-dark: #6f1116;
+            --sfc-cream: #fff8df;
+            --sfc-cream-soft: #fffdf4;
+            --sfc-gold: #f4c542;
+            --sfc-ink: #1b1408;
+            --sfc-muted: #756b58;
+            --sfc-border: #ecdcae;
+        }
+
+        body.sfc-admin-shell {
+            background:
+                radial-gradient(circle at top left, rgba(244, 197, 66, 0.15), transparent 32rem),
+                linear-gradient(180deg, #fffdf4 0%, #fff8df 100%);
+            color: var(--sfc-ink);
+        }
+
+        .sfc-admin-sidebar {
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 28%),
+                linear-gradient(180deg, #4a1014 0%, #351013 58%, #241113 100%);
+        }
+
+        .sfc-admin-nav {
+            color: rgba(255, 255, 255, 0.84);
+        }
+
+        .sfc-admin-nav:hover {
+            background: rgba(255, 248, 223, 0.12);
+            color: #fff;
+        }
+
+        .sfc-admin-nav.is-active {
+            background: rgba(255, 248, 223, 0.96);
+            color: #5c1014;
+            box-shadow: inset 4px 0 0 #d6a51f, 0 8px 18px rgba(18, 8, 8, 0.16);
+        }
+
+        .sfc-admin-content article,
+        .sfc-admin-content section,
+        .sfc-admin-content aside > section,
+        .sfc-admin-content form.rounded-lg {
+            border-color: var(--sfc-border) !important;
+            background: rgba(255, 253, 244, 0.96) !important;
+            box-shadow: 0 12px 30px rgba(127, 37, 4, 0.08) !important;
+        }
+
+        .sfc-admin-content .text-violet-700,
+        .sfc-admin-content .text-teal-700,
+        .sfc-admin-content p.font-semibold {
+            color: #b80409;
+        }
+
+        .sfc-admin-content .text-slate-500,
+        .sfc-admin-content .text-slate-600 {
+            color: var(--sfc-muted) !important;
+        }
+
+        .sfc-admin-content .bg-violet-600,
+        .sfc-admin-content .bg-teal-600 {
+            background-color: var(--sfc-red) !important;
+        }
+
+        .sfc-admin-content .text-violet-700 {
+            color: var(--sfc-red-dark) !important;
+        }
+
+        .sfc-admin-content a:hover,
+        .sfc-admin-content button:hover {
+            border-color: var(--sfc-gold) !important;
+        }
+
+        .sfc-admin-content input:focus,
+        .sfc-admin-content textarea:focus,
+        .sfc-admin-content select:focus {
+            border-color: var(--sfc-red) !important;
+            box-shadow: 0 0 0 2px rgba(216, 5, 11, 0.12) !important;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-900 lg:overflow-hidden">
+<body class="sfc-admin-shell lg:overflow-hidden">
     <div class="min-h-screen lg:flex lg:h-screen">
-        <aside id="adminSidebar" class="flex flex-col bg-[#061b3a] text-white transition-all duration-200 lg:h-screen lg:w-72 lg:shrink-0 lg:overflow-hidden">
-            <div class="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-5">
-                <div class="min-w-0">
-                    <p class="whitespace-nowrap text-lg font-bold leading-tight" data-sidebar-label>SuperFlow Food Club</p>
-                    <p class="mt-1 text-xs text-blue-200" data-sidebar-label>Admin Console</p>
-                </div>
+        <aside id="adminSidebar" class="sfc-admin-sidebar flex flex-col text-white transition-all duration-200 lg:h-screen lg:w-72 lg:shrink-0 lg:overflow-hidden">
+            <div class="flex items-center justify-between gap-3 border-b border-white/15 px-5 py-5">
+                <a href="{% url 'admin_dashboard_home' %}" class="flex min-w-0 items-center gap-3">
+                    <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white p-1.5 shadow-sm">
+                        <img src="{% static 'web/images/sfc-logo.png' %}" alt="SFC logo" class="h-full w-full rounded-full object-contain">
+                    </span>
+                    <span class="min-w-0" data-sidebar-label>
+                        <span class="block whitespace-nowrap text-lg font-extrabold leading-tight">SuperFlow</span>
+                        <span class="block whitespace-nowrap text-sm font-semibold text-yellow-100">Food Club</span>
+                        <span class="mt-1 block text-xs text-white/70">Admin Console</span>
+                    </span>
+                </a>
                 <button id="sidebarToggle" type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 hover:bg-white/10" aria-label="Toggle sidebar">
                     <span class="grid gap-1">
                         <span class="block h-0.5 w-4 bg-white"></span>
@@ -24,34 +112,34 @@
             </div>
             <div class="flex flex-1 flex-col justify-between">
                 <nav class="grid gap-1 px-3 py-4 text-sm">
-                    <a href="{% url 'admin_dashboard_home' %}" title="Dashboard" class="rounded-lg px-3 py-2.5 {% if active_page == 'dashboard' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Dashboard</span></a>
-                    <a href="{% url 'admin_registered_users' %}" title="Registered Users" class="rounded-lg px-3 py-2.5 {% if active_page == 'registered_users' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Registered Users</span></a>
-                    <a href="{% url 'admin_membership_requests' %}" title="Membership Requests" class="rounded-lg px-3 py-2.5 {% if active_page == 'membership_requests' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Membership Requests</span></a>
-                    <a href="{% url 'admin_subscription_plans' %}" title="Subscription Plans" class="rounded-lg px-3 py-2.5 {% if active_page == 'subscription_plans' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Subscription Plans</span></a>
-                    <a href="{% url 'admin_payments_dashboard' %}" title="Payments" class="rounded-lg px-3 py-2.5 {% if active_page == 'payments' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Payments</span></a>
-                    <a href="{% url 'admin_loyalty_rewards_dashboard' %}" title="Rewards" class="rounded-lg px-3 py-2.5 {% if active_page == 'loyalty_rewards' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Rewards</span></a>
-                    <a href="{% url 'admin_send_notification' %}" title="Send Notification" class="rounded-lg px-3 py-2.5 {% if active_page == 'send_notification' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Send Notification</span></a>
-                    <a href="{% url 'admin_notification_rules' %}" title="Auto Notification Rules" class="rounded-lg px-3 py-2.5 {% if active_page == 'notification_rules' %}bg-violet-600 text-white{% else %}text-blue-100 hover:bg-white/10{% endif %}"><span data-sidebar-label>Auto Notification Rules</span></a>
+                    <a href="{% url 'admin_dashboard_home' %}" title="Dashboard" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'dashboard' %}is-active{% endif %}"><span data-sidebar-label>Dashboard</span></a>
+                    <a href="{% url 'admin_registered_users' %}" title="Registered Users" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'registered_users' %}is-active{% endif %}"><span data-sidebar-label>Registered Users</span></a>
+                    <a href="{% url 'admin_membership_requests' %}" title="Membership Requests" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'membership_requests' %}is-active{% endif %}"><span data-sidebar-label>Membership Requests</span></a>
+                    <a href="{% url 'admin_subscription_plans' %}" title="Subscription Plans" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'subscription_plans' %}is-active{% endif %}"><span data-sidebar-label>Subscription Plans</span></a>
+                    <a href="{% url 'admin_payments_dashboard' %}" title="Payments" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'payments' %}is-active{% endif %}"><span data-sidebar-label>Payments</span></a>
+                    <a href="{% url 'admin_loyalty_rewards_dashboard' %}" title="Rewards" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'loyalty_rewards' %}is-active{% endif %}"><span data-sidebar-label>Rewards</span></a>
+                    <a href="{% url 'admin_send_notification' %}" title="Send Notification" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'send_notification' %}is-active{% endif %}"><span data-sidebar-label>Send Notification</span></a>
+                    <a href="{% url 'admin_notification_rules' %}" title="Auto Notification Rules" class="sfc-admin-nav rounded-lg px-3 py-2.5 font-semibold {% if active_page == 'notification_rules' %}is-active{% endif %}"><span data-sidebar-label>Auto Notification Rules</span></a>
                 </nav>
                 <div class="px-3 pb-4">
-                    <a href="{% url 'admin_dashboard_logout' %}" title="Logout" class="block rounded-lg border border-white/10 px-3 py-2.5 text-sm text-blue-100 hover:bg-white/10"><span data-sidebar-label>Logout</span></a>
+                    <a href="{% url 'admin_dashboard_logout' %}" title="Logout" class="block rounded-lg border border-white/15 px-3 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white"><span data-sidebar-label>Logout</span></a>
                 </div>
             </div>
         </aside>
 
         <main class="flex-1 lg:h-screen lg:overflow-y-auto">
-            <header class="border-b border-slate-200 bg-white px-5 py-4">
+            <header class="border-b border-[#ecdcae] bg-[#fffdf4]/95 px-5 py-4 shadow-sm">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h1 class="text-xl font-semibold text-slate-950">{% block page_title %}Dashboard{% endblock %}</h1>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="hidden rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-500 md:block">01 May 2026 - 31 May 2026</div>
-                        <div class="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">{{ club_admin.name|default:'Admin' }}</div>
+                        <div id="adminLiveDateTime" class="hidden rounded-lg border border-[#ecdcae] bg-white/80 px-3 py-2 text-sm font-semibold text-[#7d0206] md:block">Loading time...</div>
+                        <div class="rounded-full border border-[#ecdcae] bg-[#fff8df] px-4 py-2 text-sm font-semibold text-[#7d0206]">{{ club_admin.name|default:'Admin' }}</div>
                     </div>
                 </div>
             </header>
-            <section class="px-5 py-5">
+            <section class="sfc-admin-content px-5 py-5">
                 {% if messages %}
                     <div class="mb-4 space-y-2">
                         {% for message in messages %}
@@ -75,6 +163,24 @@
                 label.classList.toggle('lg:hidden', isCollapsed);
             });
         });
+
+        function updateAdminLiveDateTime() {
+            const target = document.getElementById('adminLiveDateTime');
+            if (!target) return;
+            const now = new Date();
+            target.textContent = new Intl.DateTimeFormat('en-IN', {
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+            }).format(now);
+        }
+        updateAdminLiveDateTime();
+        setInterval(updateAdminLiveDateTime, 1000);
     </script>
 </body>
 </html>

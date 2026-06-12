@@ -256,6 +256,41 @@ class MobileAuthAPITests(APITestCase):
         self.assertEqual(response.data['message'], 'Unsupported file type')
         self.assertEqual(IssueReportDocument.objects.count(), 0)
 
+    def test_user_dashboard_profile_update_does_not_change_nominee_details(self):
+        profile = self.authenticate_mobile_user()
+        profile.nominee_full_name = 'Admin Nominee'
+        profile.nominee_relationship = 'Sibling'
+        profile.nominee_phone_number = '9000000000'
+        profile.save(update_fields=['nominee_full_name', 'nominee_relationship', 'nominee_phone_number'])
+        self.client.force_login(profile.user)
+
+        response = self.client.post(
+            reverse('dashboard_profile'),
+            {
+                'full_name': 'Updated User',
+                'dob': '1995-01-15',
+                'pan_no': 'ABCDE1234F',
+                'gender': 'O',
+                'nationality': 'Indian',
+                'address': 'Updated address',
+                'city': 'Kolkata',
+                'state': 'West Bengal',
+                'postal_code': '700001',
+                'phone_number': '9876500000',
+                'email_address': 'updated.user@example.com',
+                'how_did_you_hear_about_club': 'Friend',
+                'nominee_full_name': 'Tampered Nominee',
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        profile.refresh_from_db()
+        self.assertEqual(profile.full_name, 'Updated User')
+        self.assertEqual(profile.city, 'Kolkata')
+        self.assertEqual(profile.nominee_full_name, 'Admin Nominee')
+        self.assertEqual(profile.nominee_relationship, 'Sibling')
+        self.assertEqual(profile.nominee_phone_number, '9000000000')
+
 
 class RewardEngineTests(APITestCase):
     def setUp(self):

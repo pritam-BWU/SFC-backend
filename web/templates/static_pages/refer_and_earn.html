@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refer & Earn | FoodClub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: linear-gradient(180deg, #fffdf4 0%, #fff8df 100%); color: #1b1408; }
+    .card { border: 1px solid #ecdcae; background: rgba(255,253,244,.96); border-radius: 22px; box-shadow: 0 14px 34px rgba(127,37,4,.08); }
+    .pill { border: 1px solid #ecdcae; background: #fff8df; color: #7d0206; border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 800; }
+    .node { border: 2px solid #ecdcae; background: #fff; border-radius: 18px; padding: 16px; text-align: center; font-weight: 900; }
+    .arrow { color: #b91c1c; font-weight: 900; }
+  </style>
+</head>
+<body>
+  {% include 'components/navbar.html' %}
+
+  <main class="mx-auto max-w-[1440px] px-6 py-8">
+    <section class="card p-8">
+      <p class="text-sm font-black uppercase tracking-[0.25em] text-[#b91c1c]">Reward Area 2</p>
+      <div class="mt-3 grid gap-8 lg:grid-cols-[1fr_420px]">
+        <div>
+          <h1 class="text-5xl font-black leading-tight">Refer & Earn Rewards</h1>
+          <p class="mt-5 max-w-3xl text-lg leading-8 text-[#756b58]">
+            Every member receives a unique referral code. When another user joins using that code and their subscription is approved by admin, the referral becomes completed and rewards are credited.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="pill">Direct referral</span>
+            <span class="pill">Indirect referral up to 4 levels</span>
+            <span class="pill">Calculated from earner's own plan fee</span>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-[#ecdcae] bg-white p-6">
+          <p class="text-sm font-black uppercase tracking-[0.2em] text-[#b91c1c]">Core Formula</p>
+          <p class="mt-4 text-2xl font-black">Reward = Own plan fee x applicable percentage</p>
+          <p class="mt-4 text-sm leading-6 text-[#756b58]">
+            The referred member's purchase amount is not shown to the referrer. The reward is based on the referrer's active membership plan amount.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6 grid gap-5 lg:grid-cols-5">
+      <div class="node">You</div>
+      <div class="node">Direct<br><span class="text-sm text-[#756b58]">Depth 1</span></div>
+      <div class="node">Consultant<br><span class="text-sm text-[#756b58]">Depth 2</span></div>
+      <div class="node">Patron<br><span class="text-sm text-[#756b58]">Depth 3</span></div>
+      <div class="node">Coach / Ambassador<br><span class="text-sm text-[#756b58]">Depth 4-5</span></div>
+    </section>
+
+    <section class="mt-6 grid gap-6 lg:grid-cols-[1fr_0.85fr]">
+      <div class="card p-6">
+        <h2 class="text-3xl font-black">Direct Referral Calculation</h2>
+        <p class="mt-2 text-sm leading-6 text-[#756b58]">These totals are cumulative for a full bracket. Each completed referral uses the percentage of its bracket.</p>
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full min-w-[820px] text-left text-sm">
+            <thead>
+              <tr class="border-b border-[#ecdcae] text-xs uppercase text-[#756b58]">
+                <th class="py-4 pr-4">Plan</th>
+                <th class="py-4 pr-4">Fee</th>
+                <th class="py-4 pr-4">1-5 at 1%</th>
+                <th class="py-4 pr-4">6-10 at 2%</th>
+                <th class="py-4 pr-4">11-15 at 3%</th>
+                <th class="py-4 pr-4">16-20 at 4%</th>
+                <th class="py-4 pr-4">21-25 at 5%</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#f1e4ba]">
+              <tr><td class="py-4 pr-4 font-black">Bronze</td><td>Rs. 5,000</td><td>Rs. 250</td><td>Rs. 750</td><td>Rs. 1,500</td><td>Rs. 2,500</td><td>Rs. 3,750</td></tr>
+              <tr><td class="py-4 pr-4 font-black">Silver</td><td>Rs. 10,000</td><td>Rs. 500</td><td>Rs. 1,500</td><td>Rs. 3,000</td><td>Rs. 5,000</td><td>Rs. 7,500</td></tr>
+              <tr><td class="py-4 pr-4 font-black">Platinum</td><td>Rs. 25,000</td><td>Rs. 1,250</td><td>Rs. 3,750</td><td>Rs. 7,500</td><td>Rs. 12,500</td><td>Rs. 18,750</td></tr>
+              <tr><td class="py-4 pr-4 font-black">Gold</td><td>Rs. 50,000</td><td>Rs. 2,500</td><td>Rs. 7,500</td><td>Rs. 15,000</td><td>Rs. 25,000</td><td>Rs. 37,500</td></tr>
+              <tr><td class="py-4 pr-4 font-black">Diamond</td><td>Rs. 100,000</td><td>Rs. 5,000</td><td>Rs. 15,000</td><td>Rs. 30,000</td><td>Rs. 50,000</td><td>Rs. 75,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <h2 class="text-3xl font-black">How the Chain Is Recognized</h2>
+        <div class="mt-5 space-y-4">
+          <div class="rounded-2xl border border-[#ecdcae] bg-white p-4">
+            <p class="font-black">1. Direct relation</p>
+            <p class="mt-1 text-sm text-[#756b58]">A referral edge stores parent -> child when a referral code is used.</p>
+          </div>
+          <div class="rounded-2xl border border-[#ecdcae] bg-white p-4">
+            <p class="font-black">2. Full ancestry</p>
+            <p class="mt-1 text-sm text-[#756b58]">A closure table stores ancestor -> descendant with depth for long chains.</p>
+          </div>
+          <div class="rounded-2xl border border-[#ecdcae] bg-white p-4">
+            <p class="font-black">3. Level conversion</p>
+            <p class="mt-1 text-sm text-[#756b58]">Indirect level = depth - 1. Depth 5 means level 4 Brand Ambassador reward.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card mt-6 p-6">
+      <h2 class="text-3xl font-black">Indirect Referral Levels</h2>
+      <p class="mt-2 text-sm leading-6 text-[#756b58]">Indirect counts are counted across the total network at that level, not separately branch-by-branch.</p>
+      <div class="mt-5 overflow-x-auto">
+        <table class="w-full min-w-[900px] text-left text-sm">
+          <thead>
+            <tr class="border-b border-[#ecdcae] text-xs uppercase text-[#756b58]">
+              <th class="py-4 pr-4">Role</th>
+              <th class="py-4 pr-4">Network Depth</th>
+              <th class="py-4 pr-4">1-5</th>
+              <th class="py-4 pr-4">6-10</th>
+              <th class="py-4 pr-4">11-15</th>
+              <th class="py-4 pr-4">16-20</th>
+              <th class="py-4 pr-4">21+</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#f1e4ba]">
+            <tr><td class="py-4 pr-4 font-black">Consultant</td><td>Indirect level 1</td><td>0.5%</td><td>1%</td><td>1.5%</td><td>2%</td><td>2.5%</td></tr>
+            <tr><td class="py-4 pr-4 font-black">Patron</td><td>Indirect level 2</td><td>0.5%</td><td>1%</td><td>1.5%</td><td>2%</td><td>2.5%</td></tr>
+            <tr><td class="py-4 pr-4 font-black">Coach</td><td>Indirect level 3</td><td>0.25%</td><td>0.5%</td><td>0.75%</td><td>1%</td><td>1.25%</td></tr>
+            <tr><td class="py-4 pr-4 font-black">Brand Ambassador</td><td>Indirect level 4</td><td>0.25%</td><td>0.5%</td><td>0.75%</td><td>1%</td><td>1.25%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="mx-auto max-w-[1440px] px-6 pb-8">
+    {% include 'components/footer.html' %}
+  </div>
+</body>
+</html>

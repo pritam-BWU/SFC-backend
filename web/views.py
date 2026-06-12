@@ -26,6 +26,7 @@ from .forms import (
     GlobalPoolSettingForm,
     NotificationRuleForm,
     SubscriptionPlanForm,
+    UserDashboardProfileForm,
 )
 from .models import (
     AdminAccount,
@@ -172,6 +173,16 @@ def membership(request):
 def plan_checkout(request):
     return render(request, 'static_pages/plan_checkout.html')
 
+def reward_points(request):
+    plans = SubscriptionMasterPlan.objects.order_by('plan_price', 'plan_name')
+    return render(request, 'static_pages/reward_points.html', {'plans': plans})
+
+def refer_and_earn(request):
+    return render(request, 'static_pages/refer_and_earn.html')
+
+def global_pool(request):
+    return render(request, 'static_pages/global_pool.html')
+
 
 class DashboardLoginView(LoginView):
     template_name = 'user_dashboard/login.html'
@@ -206,8 +217,28 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profile'] = get_or_create_profile(self.request.user)
+        profile = get_or_create_profile(self.request.user)
+        context['profile'] = profile
+        context['form'] = kwargs.get('form') or UserDashboardProfileForm(instance=profile)
+        context['reward_points'] = RewardPoints.objects.filter(user_profile=profile).first()
+        context['global_pool_member'] = getattr(profile, 'global_pool_member', None)
         return context
+
+    def post(self, request, *args, **kwargs):
+        profile = get_or_create_profile(request.user)
+        form = UserDashboardProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            updated_profile = form.save()
+            full_name = updated_profile.full_name.strip()
+            if full_name:
+                request.user.first_name = full_name.split(' ', 1)[0]
+                request.user.last_name = full_name.split(' ', 1)[1] if ' ' in full_name else ''
+            if updated_profile.email_address:
+                request.user.email = updated_profile.email_address
+            request.user.save(update_fields=['first_name', 'last_name', 'email'])
+            messages.success(request, 'Profile details updated successfully.')
+            return redirect('dashboard_profile')
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class UserSubscriptionView(LoginRequiredMixin, TemplateView):

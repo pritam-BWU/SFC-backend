@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,14 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SFC Dashboard{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --sfc-red: #b91c1c;
+            --sfc-red-dark: #6f1116;
+            --sfc-cream: #fff8df;
+            --sfc-cream-soft: #fffdf4;
+            --sfc-gold: #f4c542;
+            --sfc-ink: #1b1408;
+            --sfc-muted: #756b58;
+            --sfc-border: #ecdcae;
+        }
+
+        body.sfc-user-shell {
+            background:
+                radial-gradient(circle at top left, rgba(244, 197, 66, 0.18), transparent 32rem),
+                linear-gradient(180deg, #fffdf4 0%, #fff8df 100%);
+            color: var(--sfc-ink);
+        }
+
+        .sfc-sidebar {
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 28%),
+                linear-gradient(180deg, #4a1014 0%, #351013 58%, #241113 100%);
+        }
+
+        .sfc-nav-link {
+            color: rgba(255, 255, 255, 0.84);
+        }
+
+        .sfc-nav-link:hover {
+            background: rgba(255, 248, 223, 0.12);
+            color: #fff;
+        }
+
+        .sfc-nav-link.is-active {
+            background: rgba(255, 248, 223, 0.96);
+            color: #5c1014;
+            box-shadow: inset 4px 0 0 #d6a51f, 0 8px 18px rgba(18, 8, 8, 0.16);
+        }
+
+        .sfc-user-content article,
+        .sfc-user-content section,
+        .sfc-user-content form.rounded-lg {
+            border-color: var(--sfc-border) !important;
+            background: rgba(255, 253, 244, 0.96) !important;
+            box-shadow: 0 12px 30px rgba(127, 37, 4, 0.08) !important;
+        }
+
+        .sfc-user-content p.uppercase,
+        .sfc-user-content .text-teal-700 {
+            color: #b80409 !important;
+        }
+
+        .sfc-user-content .text-slate-500,
+        .sfc-user-content .text-slate-600 {
+            color: var(--sfc-muted) !important;
+        }
+
+        .sfc-user-content .bg-teal-600,
+        .sfc-user-content .bg-teal-500 {
+            background-color: var(--sfc-red) !important;
+        }
+
+        .sfc-user-content a:hover,
+        .sfc-user-content button:hover {
+            border-color: var(--sfc-gold) !important;
+        }
+
+        .sfc-user-content input:focus,
+        .sfc-user-content textarea:focus,
+        .sfc-user-content select:focus {
+            border-color: var(--sfc-red) !important;
+            box-shadow: 0 0 0 2px rgba(216, 5, 11, 0.12) !important;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-900">
+<body class="sfc-user-shell">
     <div class="min-h-screen md:flex">
-        <aside class="bg-slate-950 text-white md:min-h-screen md:w-72">
-            <div class="flex items-center justify-between border-b border-white/10 px-5 py-4 md:block">
-                <a href="{% url 'dashboard_home' %}" class="block">
-                    <span class="text-lg font-semibold tracking-wide">SFC</span>
-                    <span class="block text-xs text-slate-400">Member Portal</span>
+        <aside class="sfc-sidebar text-white md:min-h-screen md:w-72">
+            <div class="flex items-center justify-between border-b border-white/15 px-5 py-4 md:block">
+                <a href="{% url 'dashboard_home' %}" class="flex items-center gap-3">
+                    <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white p-1.5 shadow-sm">
+                        <img src="{% static 'web/images/sfc-logo.png' %}" alt="SFC logo" class="h-full w-full rounded-full object-contain">
+                    </span>
+                    <span class="min-w-0">
+                        <span class="block text-lg font-extrabold leading-tight tracking-wide">SuperFlow</span>
+                        <span class="block text-sm font-semibold text-yellow-100">Food Club</span>
+                        <span class="block text-xs text-white/70">Member Portal</span>
+                    </span>
                 </a>
                 <form method="post" action="{% url 'dashboard_logout' %}" class="md:hidden">
                     {% csrf_token %}
@@ -20,32 +102,61 @@
                 </form>
             </div>
             <nav class="grid grid-cols-3 gap-2 px-3 py-3 md:block md:space-y-2 md:px-4 md:py-6">
-                <a href="{% url 'dashboard_home' %}" class="rounded-lg px-3 py-3 text-center text-sm transition hover:bg-white/10 md:block md:text-left {% if request.resolver_match.url_name == 'dashboard_home' %}bg-teal-500 text-white{% else %}text-slate-300{% endif %}">Dashboard</a>
-                <a href="{% url 'dashboard_profile' %}" class="rounded-lg px-3 py-3 text-center text-sm transition hover:bg-white/10 md:block md:text-left {% if request.resolver_match.url_name == 'dashboard_profile' %}bg-teal-500 text-white{% else %}text-slate-300{% endif %}">Profile</a>
-                <a href="{% url 'dashboard_subscription' %}" class="rounded-lg px-3 py-3 text-center text-sm transition hover:bg-white/10 md:block md:text-left {% if request.resolver_match.url_name == 'dashboard_subscription' %}bg-teal-500 text-white{% else %}text-slate-300{% endif %}">Subscription</a>
+                <a href="{% url 'dashboard_home' %}" class="sfc-nav-link rounded-lg px-3 py-3 text-center text-sm font-semibold transition md:block md:text-left {% if request.resolver_match.url_name == 'dashboard_home' %}is-active{% endif %}">Dashboard</a>
+                <a href="{% url 'dashboard_profile' %}" class="sfc-nav-link rounded-lg px-3 py-3 text-center text-sm font-semibold transition md:block md:text-left {% if request.resolver_match.url_name == 'dashboard_profile' %}is-active{% endif %}">Profile</a>
+                <a href="{% url 'dashboard_subscription' %}" class="sfc-nav-link rounded-lg px-3 py-3 text-center text-sm font-semibold transition md:block md:text-left {% if request.resolver_match.url_name == 'dashboard_subscription' %}is-active{% endif %}">Subscription</a>
             </nav>
             <form method="post" action="{% url 'dashboard_logout' %}" class="hidden px-4 md:block">
                 {% csrf_token %}
-                <button type="submit" class="w-full rounded-lg border border-white/10 px-4 py-3 text-left text-sm text-slate-300 transition hover:bg-white/10 hover:text-white">Logout</button>
+                <button type="submit" class="w-full rounded-lg border border-white/15 px-4 py-3 text-left text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white">Logout</button>
             </form>
         </aside>
 
         <main class="flex-1">
-            <header class="border-b border-slate-200 bg-white px-5 py-4 md:px-8">
+            <header class="border-b border-[#ecdcae] bg-[#fffdf4]/95 px-5 py-4 shadow-sm md:px-8">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">User Dashboard</p>
+                        <p class="text-xs font-semibold uppercase tracking-wide text-[#b80409]">Welcome {{ request.user.profile.full_name|default:request.user.username }}</p>
                         <h1 class="text-xl font-semibold text-slate-950 md:text-2xl">{% block page_title %}Dashboard{% endblock %}</h1>
                     </div>
-                    <div class="rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-600">
-                        {{ request.user.username }}
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="rounded-lg border border-[#ecdcae] bg-white/80 px-4 py-2 text-sm font-semibold text-[#7d0206]" id="liveDateTime">Loading time...</div>
+                        <div class="rounded-full border border-[#ecdcae] bg-[#fff8df] px-4 py-2 text-sm font-semibold text-[#7d0206]">
+                            {{ request.user.username }}
+                        </div>
                     </div>
                 </div>
             </header>
-            <section class="px-5 py-6 md:px-8">
+            <section class="sfc-user-content px-5 py-6 md:px-8">
+                {% if messages %}
+                    <div class="mb-4 space-y-2">
+                        {% for message in messages %}
+                            <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 {% block content %}{% endblock %}
             </section>
         </main>
     </div>
+    <script>
+        function updateLiveDateTime() {
+            const target = document.getElementById('liveDateTime');
+            if (!target) return;
+            const now = new Date();
+            target.textContent = new Intl.DateTimeFormat('en-IN', {
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+            }).format(now);
+        }
+        updateLiveDateTime();
+        setInterval(updateLiveDateTime, 1000);
+    </script>
 </body>
 </html>

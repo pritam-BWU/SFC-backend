@@ -4,27 +4,7 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="grid gap-5 lg:grid-cols-3">
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-2">
-        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Welcome</p>
-        <h2 class="mt-2 text-3xl font-semibold text-slate-950">{{ profile.full_name }}</h2>
-        <p class="mt-2 text-slate-500">Username: {{ request.user.username }}</p>
-    </article>
-
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <div class="flex items-start justify-between gap-4">
-            <div>
-                <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Status</p>
-                <h2 class="mt-2 text-2xl font-semibold text-slate-950">{% if profile.is_active %}Active{% else %}Inactive{% endif %}</h2>
-            </div>
-            <span class="rounded-full px-3 py-1 text-xs font-semibold {% if profile.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
-                Member
-            </span>
-        </div>
-    </article>
-</div>
-
-<div class="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+<div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
     <article class="rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200">
         <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Total Rewards</p>
         <p class="mt-3 text-2xl font-semibold text-slate-950">Rs. {{ reward_points.total_rewards|default:'0.00' }}</p>
@@ -104,86 +84,4 @@
         </table>
     </div>
 </section>
-
-<div class="mt-5 grid gap-5 xl:grid-cols-2">
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <div class="flex items-start justify-between gap-4">
-            <div>
-                <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Subscription</p>
-                <h3 class="mt-2 text-xl font-semibold text-slate-950">{{ profile.subscription_plan.plan_name|default:'No plan assigned' }}</h3>
-            </div>
-            <a href="{% url 'dashboard_subscription' %}" class="rounded-md border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">View</a>
-        </div>
-        <dl class="mt-6 grid gap-4 sm:grid-cols-2">
-            <div>
-                <dt class="text-sm text-slate-500">Price</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{% if profile.subscription_plan %}Rs. {{ profile.subscription_plan.plan_price }}{% else %}-{% endif %}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Refundable</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{% if profile.subscription_plan %}{% if profile.subscription_plan.refundable %}Yes{% else %}No{% endif %}{% else %}-{% endif %}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Subscription Status</dt>
-                <dd class="mt-1 font-semibold capitalize text-slate-950">{{ profile.subscription_status.status_name|default:'pending' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Non Refundable</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{% if profile.subscription_plan %}{% if profile.subscription_plan.non_refundable %}Yes{% else %}No{% endif %}{% else %}-{% endif %}</dd>
-            </div>
-        </dl>
-    </article>
-
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Membership Info</p>
-        <dl class="mt-6 grid gap-4 sm:grid-cols-2">
-            <div>
-                <dt class="text-sm text-slate-500">Membership ID</dt>
-                <dd class="mt-1 break-words font-semibold text-slate-950">{{ profile.id }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Created Date</dt>
-                <dd class="mt-1 font-semibold text-slate-950">{{ profile.created_at|date:'d M Y' }}</dd>
-            </div>
-            <div class="sm:col-span-2">
-                <dt class="text-sm text-slate-500">Heard About Club</dt>
-                <dd class="mt-1 break-words font-semibold text-slate-950">{{ profile.how_did_you_hear_about_club|default:'-' }}</dd>
-            </div>
-        </dl>
-    </article>
-</div>
-
-<div class="mt-5 grid gap-5 xl:grid-cols-3">
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Payment Info</p>
-        <p class="mt-4 whitespace-pre-line text-sm leading-6 text-slate-700">{{ profile.payment_details|default:'No payment details available.' }}</p>
-    </article>
-
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Nominee Information</p>
-        <dl class="mt-4 space-y-3">
-            <div>
-                <dt class="text-sm text-slate-500">Full Name</dt>
-                <dd class="font-semibold text-slate-950">{{ profile.nominee_full_name|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Relationship</dt>
-                <dd class="font-semibold text-slate-950">{{ profile.nominee_relationship|default:'-' }}</dd>
-            </div>
-            <div>
-                <dt class="text-sm text-slate-500">Phone Number</dt>
-                <dd class="font-semibold text-slate-950">{{ profile.nominee_phone_number|default:'-' }}</dd>
-            </div>
-        </dl>
-    </article>
-
-    <article class="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Document</p>
-        {% if profile.uploaded_form_document %}
-            <img src="{{ profile.uploaded_form_document.url }}" alt="Uploaded membership document" class="mt-4 h-56 w-full rounded-lg object-cover ring-1 ring-slate-200">
-        {% else %}
-            <div class="mt-4 flex h-56 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500">No document uploaded</div>
-        {% endif %}
-    </article>
-</div>
 {% endblock %}

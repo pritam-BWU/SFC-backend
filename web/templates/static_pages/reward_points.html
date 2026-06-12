@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reward Points | FoodClub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(180deg, #fffdf4 0%, #fff8df 100%);
+      color: #1b1408;
+    }
+    .card {
+      border: 1px solid #ecdcae;
+      background: rgba(255, 253, 244, 0.96);
+      border-radius: 22px;
+      box-shadow: 0 14px 34px rgba(127, 37, 4, 0.08);
+    }
+    .pill {
+      border: 1px solid #ecdcae;
+      background: #fff8df;
+      color: #7d0206;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  {% include 'components/navbar.html' %}
+
+  <main class="mx-auto max-w-[1440px] px-6 py-8">
+    <section class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <div class="card p-8">
+        <p class="text-sm font-black uppercase tracking-[0.25em] text-[#b91c1c]">Reward Area 1</p>
+        <h1 class="mt-3 max-w-4xl text-5xl font-black leading-tight">Plan-Based Loyalty Reward Points</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-[#756b58]">
+          Loyalty rewards are attached directly to the member's active subscription plan. After admin approval, the member selects a monthly or yearly reward preference and receives the plan-configured amount for that period.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <span class="pill">Starts after admin approval</span>
+          <span class="pill">Monthly or yearly preference</span>
+          <span class="pill">Ledger-based credit history</span>
+        </div>
+      </div>
+
+      <div class="card p-8">
+        <p class="text-sm font-black uppercase tracking-[0.25em] text-[#b91c1c]">Credit Formula</p>
+        <div class="mt-5 rounded-2xl border border-[#ecdcae] bg-white p-5">
+          <p class="text-sm font-bold text-[#756b58]">Monthly preference</p>
+          <p class="mt-2 text-2xl font-black">Credit = plan monthly reward</p>
+        </div>
+        <div class="mt-4 rounded-2xl border border-[#ecdcae] bg-white p-5">
+          <p class="text-sm font-bold text-[#756b58]">Yearly preference</p>
+          <p class="mt-2 text-2xl font-black">Credit = plan yearly reward</p>
+        </div>
+        <p class="mt-5 text-sm leading-6 text-[#756b58]">
+          Every credit is written into the reward ledger first, then the user reward balance is updated.
+        </p>
+      </div>
+    </section>
+
+    <section class="card mt-6 p-6">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-black uppercase tracking-[0.25em] text-[#b91c1c]">Configured Plans</p>
+          <h2 class="mt-2 text-3xl font-black">Current Loyalty Reward Table</h2>
+        </div>
+        <a href="/membership/" class="rounded-xl bg-[#b91c1c] px-5 py-3 text-sm font-black text-white hover:bg-[#8f1117]">View Membership Plans</a>
+      </div>
+
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[980px] text-left text-sm">
+          <thead>
+            <tr class="border-b border-[#ecdcae] text-xs uppercase tracking-wide text-[#756b58]">
+              <th class="py-4 pr-4">Plan</th>
+              <th class="py-4 pr-4">Plan Fee</th>
+              <th class="py-4 pr-4">Type</th>
+              <th class="py-4 pr-4">Monthly Loyalty</th>
+              <th class="py-4 pr-4">Yearly Loyalty</th>
+              <th class="py-4 pr-4">Global Pool Cap</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#f1e4ba]">
+            {% for plan in plans %}
+              <tr>
+                <td class="py-4 pr-4 text-base font-black">{{ plan.plan_name }}</td>
+                <td class="py-4 pr-4 font-bold">Rs. {{ plan.plan_price }}</td>
+                <td class="py-4 pr-4">
+                  {% if plan.refundable %}<span class="pill">Refundable</span>{% endif %}
+                  {% if plan.non_refundable %}<span class="pill">Non-refundable</span>{% endif %}
+                  {% if not plan.refundable and not plan.non_refundable %}<span class="text-[#756b58]">Standard</span>{% endif %}
+                </td>
+                <td class="py-4 pr-4 font-bold text-[#7d0206]">Rs. {{ plan.monthly_reward }}</td>
+                <td class="py-4 pr-4 font-bold text-[#7d0206]">Rs. {{ plan.yearly_reward }}</td>
+                <td class="py-4 pr-4 font-bold">Rs. {{ plan.global_pool_limit }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="py-8 text-center text-[#756b58]">No subscription plans are configured yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-6 grid gap-5 lg:grid-cols-4">
+      <article class="card p-5">
+        <span class="pill">Step 1</span>
+        <h3 class="mt-4 text-xl font-black">User Buys Plan</h3>
+        <p class="mt-2 text-sm leading-6 text-[#756b58]">The member chooses a plan and completes payment.</p>
+      </article>
+      <article class="card p-5">
+        <span class="pill">Step 2</span>
+        <h3 class="mt-4 text-xl font-black">Admin Approves</h3>
+        <p class="mt-2 text-sm leading-6 text-[#756b58]">Rewards are enabled only after the membership status becomes completed.</p>
+      </article>
+      <article class="card p-5">
+        <span class="pill">Step 3</span>
+        <h3 class="mt-4 text-xl font-black">Preference Selected</h3>
+        <p class="mt-2 text-sm leading-6 text-[#756b58]">The user selects monthly or yearly reward preference.</p>
+      </article>
+      <article class="card p-5">
+        <span class="pill">Step 4</span>
+        <h3 class="mt-4 text-xl font-black">Ledger Credit</h3>
+        <p class="mt-2 text-sm leading-6 text-[#756b58]">The system credits the ledger and notifies the user in-app.</p>
+      </article>
+    </section>
+  </main>
+
+  <div class="mx-auto max-w-[1440px] px-6 pb-8">
+    {% include 'components/footer.html' %}
+  </div>
+</body>
+</html>
